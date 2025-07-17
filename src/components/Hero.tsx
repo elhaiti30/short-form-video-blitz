@@ -2,6 +2,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight, Sparkles, Video, Zap, TrendingUp } from "lucide-react";
 import heroImage from "@/assets/hero-video-ai.jpg";
+import aiGraphics from "@/assets/ai-graphics.png";
+import videoIcons from "@/assets/video-icons.png";
 
 const Hero = () => {
   const scrollToGenerator = () => {
@@ -95,10 +97,30 @@ const Hero = () => {
           })}
         </div>
 
-        {/* Floating elements */}
+        {/* AI Graphics */}
+        <div className="absolute top-10 right-10 opacity-30 animate-float">
+          <img 
+            src={aiGraphics} 
+            alt="AI Graphics" 
+            className="w-64 h-48 object-contain"
+          />
+        </div>
+        
+        {/* Video Icons */}
+        <div className="absolute bottom-20 left-10 opacity-40 animate-float" style={{ animationDelay: "1s" }}>
+          <img 
+            src={videoIcons} 
+            alt="Video Icons" 
+            className="w-48 h-48 object-contain"
+          />
+        </div>
+
+        {/* Enhanced floating elements */}
         <div className="absolute top-20 left-10 w-20 h-20 bg-primary/5 rounded-full animate-float" style={{ animationDelay: "0s" }} />
         <div className="absolute top-40 right-20 w-16 h-16 bg-accent/5 rounded-full animate-float" style={{ animationDelay: "1s" }} />
         <div className="absolute bottom-40 left-20 w-12 h-12 bg-primary-glow/5 rounded-full animate-float" style={{ animationDelay: "2s" }} />
+        <div className="absolute top-1/2 left-5 w-8 h-8 bg-gradient-to-br from-primary/20 to-accent/20 rounded-full animate-float" style={{ animationDelay: "0.5s" }} />
+        <div className="absolute bottom-1/3 right-10 w-14 h-14 bg-gradient-to-br from-accent/10 to-primary/10 rounded-full animate-float" style={{ animationDelay: "2.5s" }} />
       </div>
     </section>
   );
