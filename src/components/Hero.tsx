@@ -69,7 +69,7 @@ const Hero = () => {
             onClick={scrollToGenerator}
             variant="ai" 
             size="lg" 
-            className="px-8 py-6 text-lg h-auto animate-glow"
+            className="px-8 py-6 text-lg h-auto animate-glow touch-manipulation"
           >
             Start Creating
             <ArrowRight className="h-5 w-5 ml-2" />
