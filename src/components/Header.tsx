@@ -19,7 +19,7 @@ const Header = () => {
             <img 
               src={logo} 
               alt="VideoBlitz AI Logo" 
-              className="h-10 w-10 object-contain"
+              className="hidden sm:block h-10 w-10 object-contain"
             />
             <span className="text-xl font-bold text-gradient">VideoBlitz AI</span>
           </div>
@@ -99,12 +99,6 @@ const Header = () => {
               </DialogContent>
             </Dialog>
 
-            <Button 
-              onClick={() => document.getElementById('video-generator')?.scrollIntoView({ behavior: 'smooth' })}
-              className="text-sm md:text-base"
-            >
-              Get Started
-            </Button>
           </div>
         </div>
       </div>
