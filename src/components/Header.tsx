@@ -29,11 +29,11 @@ const Header = () => {
           </nav>
 
           {/* CTA */}
-          <div className="flex items-center space-x-4">
-            <button className="text-muted-foreground hover:text-primary transition-colors">
+          <div className="flex items-center space-x-2 md:space-x-4">
+            <button className="hidden sm:block text-muted-foreground hover:text-primary transition-colors touch-manipulation">
               Sign In
             </button>
-            <button className="bg-primary text-primary-foreground px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors">
+            <button className="bg-primary text-primary-foreground px-3 md:px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors touch-manipulation text-sm md:text-base">
               Get Started
             </button>
           </div>
