@@ -69,7 +69,7 @@ const Header = () => {
 
             <Dialog open={isSignUpOpen} onOpenChange={setIsSignUpOpen}>
               <DialogTrigger asChild>
-                <Button variant="outline" className="text-sm">
+                <Button variant="ai" className="text-sm">
                   Sign Up
                 </Button>
               </DialogTrigger>
