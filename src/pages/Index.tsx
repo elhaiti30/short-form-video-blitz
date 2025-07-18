@@ -8,8 +8,10 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <Header />
       <Hero />
-      <PlatformFeatures />
-      <div id="video-generator">
+      <div className="py-8">
+        <PlatformFeatures />
+      </div>
+      <div id="video-generator" className="py-8">
         <VideoGenerator />
       </div>
     </div>

@@ -33,7 +33,10 @@ const Header = () => {
             <button className="hidden sm:block text-muted-foreground hover:text-primary transition-colors touch-manipulation">
               Sign In
             </button>
-            <button className="bg-primary text-primary-foreground px-3 md:px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors touch-manipulation text-sm md:text-base">
+            <button 
+              onClick={() => document.getElementById('video-generator')?.scrollIntoView({ behavior: 'smooth' })}
+              className="bg-primary text-primary-foreground px-3 md:px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors touch-manipulation text-sm md:text-base"
+            >
               Get Started
             </button>
           </div>
