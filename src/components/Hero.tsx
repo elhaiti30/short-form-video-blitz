@@ -67,7 +67,7 @@ const Hero = () => {
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-slide-up" style={{ animationDelay: "0.2s" }}>
           <Button 
             onClick={scrollToGenerator}
-            variant="ai" 
+            variant="premium" 
             size="lg" 
             className="px-8 py-6 text-lg h-auto animate-glow touch-manipulation"
           >
@@ -76,7 +76,7 @@ const Hero = () => {
           </Button>
           <Button 
             onClick={openDemo}
-            variant="ai-outline" 
+            variant="glass" 
             size="lg" 
             className="px-8 py-6 text-lg h-auto touch-manipulation"
           >
