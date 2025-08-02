@@ -5,11 +5,14 @@ import VideoGenerator from "@/components/VideoGenerator";
 import { TemplateLibrary } from "@/components/TemplateLibrary";
 import { Dashboard } from "@/components/Dashboard";
 import { TeamCollaboration } from "@/components/TeamCollaboration";
+import { AnalyticsDashboard } from "@/components/AnalyticsDashboard";
+import { AIInsights } from "@/components/AIInsights";
+import { SmartScheduler } from "@/components/SmartScheduler";
 import PlatformFeatures from "@/components/PlatformFeatures";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Video, Layout, Users, Sparkles } from "lucide-react";
+import { Video, Layout, Users, Sparkles, BarChart3, Brain, Calendar } from "lucide-react";
 
 const Index = () => {
   const [activeSection, setActiveSection] = useState("generator");
@@ -30,7 +33,7 @@ const Index = () => {
         <div className="container mx-auto px-4">
           <Tabs value={activeSection} onValueChange={setActiveSection} className="w-full">
             <div className="flex justify-center mb-8">
-              <TabsList className="grid w-full max-w-md grid-cols-4 h-12">
+              <TabsList className="grid w-full max-w-4xl grid-cols-7 h-12">
                 <TabsTrigger value="generator" className="flex items-center gap-2">
                   <Video className="h-4 w-4" />
                   <span className="hidden sm:inline">Create</span>
@@ -46,6 +49,18 @@ const Index = () => {
                 <TabsTrigger value="team" className="flex items-center gap-2">
                   <Users className="h-4 w-4" />
                   <span className="hidden sm:inline">Team</span>
+                </TabsTrigger>
+                <TabsTrigger value="analytics" className="flex items-center gap-2">
+                  <BarChart3 className="h-4 w-4" />
+                  <span className="hidden sm:inline">Analytics</span>
+                </TabsTrigger>
+                <TabsTrigger value="insights" className="flex items-center gap-2">
+                  <Brain className="h-4 w-4" />
+                  <span className="hidden sm:inline">AI Insights</span>
+                </TabsTrigger>
+                <TabsTrigger value="scheduler" className="flex items-center gap-2">
+                  <Calendar className="h-4 w-4" />
+                  <span className="hidden sm:inline">Scheduler</span>
                 </TabsTrigger>
               </TabsList>
             </div>
@@ -64,6 +79,18 @@ const Index = () => {
 
             <TabsContent value="team">
               <TeamCollaboration />
+            </TabsContent>
+
+            <TabsContent value="analytics">
+              <AnalyticsDashboard />
+            </TabsContent>
+
+            <TabsContent value="insights">
+              <AIInsights />
+            </TabsContent>
+
+            <TabsContent value="scheduler">
+              <SmartScheduler />
             </TabsContent>
           </Tabs>
         </div>
