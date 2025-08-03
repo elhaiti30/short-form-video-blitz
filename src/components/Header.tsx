@@ -5,6 +5,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/hooks/useAuth";
 import { Sparkles, Menu, Video, LogOut, User, Settings } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
 
 const Header = () => {
   const { user, signOut } = useAuth();
@@ -46,7 +47,21 @@ const Header = () => {
             <Button variant="ghost" className="hidden md:inline-flex text-sm">
               Features
             </Button>
-            <Button variant="ghost" className="hidden md:inline-flex text-sm">
+            <Button 
+              variant="ghost" 
+              className="hidden md:inline-flex text-sm"
+              onClick={() => {
+                const pricingSection = document.getElementById('pricing');
+                if (pricingSection) {
+                  pricingSection.scrollIntoView({ behavior: 'smooth' });
+                } else {
+                  toast({
+                    title: "Coming Soon",
+                    description: "Pricing plans will be available soon!",
+                  });
+                }
+              }}
+            >
               Pricing
             </Button>
             

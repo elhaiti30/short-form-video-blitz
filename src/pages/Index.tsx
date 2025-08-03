@@ -9,6 +9,7 @@ import { AnalyticsDashboard } from "@/components/AnalyticsDashboard";
 import { AIInsights } from "@/components/AIInsights";
 import { SmartScheduler } from "@/components/SmartScheduler";
 import PlatformFeatures from "@/components/PlatformFeatures";
+import PricingSection from "@/components/PricingSection";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -98,6 +99,10 @@ const Index = () => {
 
       <div className="py-16">
         <PlatformFeatures />
+      </div>
+
+      <div className="py-16 bg-card/20">
+        <PricingSection />
       </div>
       
       <Footer />
