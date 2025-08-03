@@ -5,7 +5,11 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Play, Heart, Download, Search, Filter, Zap, TrendingUp, Users, ShoppingBag, Dumbbell, Code, Utensils, Shirt, GraduationCap, Plane, Home, Building2 } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { useAuth } from "@/hooks/useAuth";
+import { useVideoData } from "@/hooks/useVideoData";
+import { toast } from "@/hooks/use-toast";
+import { Play, Heart, Download, Search, Filter, Zap, TrendingUp, Users, ShoppingBag, Dumbbell, Code, Utensils, Shirt, GraduationCap, Plane, Home, Building2, LogIn } from "lucide-react";
 
 interface Template {
   id: string;
@@ -126,14 +130,35 @@ interface TemplateLibraryProps {
 }
 
 export const TemplateLibrary = ({ onSelectTemplate }: TemplateLibraryProps) => {
+  const { user } = useAuth();
+  const { templates: dbTemplates, loading } = useVideoData();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [sortBy, setSortBy] = useState("popular");
 
-  const filteredTemplates = templates.filter(template => {
+  const handleUseTemplate = (template: any) => {
+    if (!user) {
+      toast({
+        title: "Sign in required",
+        description: "Please sign in to use templates",
+        variant: "destructive"
+      });
+      return;
+    }
+    onSelectTemplate(template);
+    toast({
+      title: "Template selected!",
+      description: `Using ${template.title} template for your project`
+    });
+  };
+
+  // Use database templates if available, otherwise fallback to static templates
+  const allTemplates = dbTemplates.length > 0 ? dbTemplates : templates;
+
+  const filteredTemplates = allTemplates.filter(template => {
     const matchesSearch = template.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         template.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         template.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
+                         template.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         template.tags?.some((tag: string) => tag.toLowerCase().includes(searchTerm.toLowerCase()));
     
     const matchesCategory = selectedCategory === "all" || template.industry === selectedCategory;
     
@@ -143,9 +168,13 @@ export const TemplateLibrary = ({ onSelectTemplate }: TemplateLibraryProps) => {
   const sortedTemplates = [...filteredTemplates].sort((a, b) => {
     switch (sortBy) {
       case "popular":
-        return b.uses - a.uses;
+        const aUses = 'uses_count' in a ? a.uses_count : a.uses;
+        const bUses = 'uses_count' in b ? b.uses_count : b.uses;
+        return bUses - aUses;
       case "likes":
-        return b.likes - a.likes;
+        const aLikes = 'likes_count' in a ? a.likes_count : a.likes;
+        const bLikes = 'likes_count' in b ? b.likes_count : b.likes;
+        return bLikes - aLikes;
       case "newest":
         return parseInt(b.id) - parseInt(a.id);
       default:
@@ -153,8 +182,29 @@ export const TemplateLibrary = ({ onSelectTemplate }: TemplateLibraryProps) => {
     }
   });
 
+  if (loading) {
+    return (
+      <div className="space-y-6">
+        <div className="text-center">
+          <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent mx-auto" />
+          <p className="text-sm text-muted-foreground mt-2">Loading templates...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
+      {/* Authentication Warning */}
+      {!user && (
+        <Alert className="max-w-4xl mx-auto">
+          <LogIn className="h-4 w-4" />
+          <AlertDescription>
+            <strong>Sign in to use templates:</strong> Create an account to access our full template library and save your projects.
+          </AlertDescription>
+        </Alert>
+      )}
+
       <div className="text-center space-y-3">
         <h2 className="text-3xl font-bold gradient-text">Professional Templates</h2>
         <p className="text-muted-foreground text-lg">Choose from industry-tested templates to jumpstart your video creation</p>
@@ -211,7 +261,7 @@ export const TemplateLibrary = ({ onSelectTemplate }: TemplateLibraryProps) => {
               <div className="aspect-video bg-gradient-to-br from-primary/20 to-secondary/20 rounded-t-lg flex items-center justify-center">
                 <Play className="h-12 w-12 text-primary/70" />
               </div>
-              {template.isPremium && (
+              {('isPremium' in template ? template.isPremium : template.is_premium) && (
                 <Badge className="absolute top-2 right-2 premium-button">
                   <Zap className="h-3 w-3 mr-1" />
                   Premium
@@ -242,23 +292,23 @@ export const TemplateLibrary = ({ onSelectTemplate }: TemplateLibraryProps) => {
 
               <div className="flex items-center justify-between text-sm text-muted-foreground">
                 <div className="flex items-center gap-3">
-                  <div className="flex items-center gap-1">
+                 <div className="flex items-center gap-1">
                     <Heart className="h-4 w-4" />
-                    {template.likes.toLocaleString()}
+                    {('likes_count' in template ? template.likes_count : template.likes).toLocaleString()}
                   </div>
                   <div className="flex items-center gap-1">
                     <TrendingUp className="h-4 w-4" />
-                    {template.uses.toLocaleString()}
+                    {('uses_count' in template ? template.uses_count : template.uses).toLocaleString()}
                   </div>
                 </div>
               </div>
 
               <Button 
-                onClick={() => onSelectTemplate(template)}
+                onClick={() => handleUseTemplate(template)}
                 className="w-full premium-button"
-                variant="premium"
+                disabled={!user}
               >
-                Use Template
+                {user ? 'Use Template' : 'Sign in to Use'}
               </Button>
             </CardContent>
           </Card>

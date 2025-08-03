@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
@@ -7,7 +8,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Slider } from "@/components/ui/slider";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
-import { Play, Download, Sparkles, Clock, Smartphone, MonitorPlay, Copy, RotateCcw, Wand2, Upload, Image, FileText, Globe, Mic, User, Building, Heart, Zap, Camera, Music } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { useAuth } from "@/hooks/useAuth";
+import { useVideoData } from "@/hooks/useVideoData";
+import { Play, Download, Sparkles, Clock, Smartphone, MonitorPlay, Copy, RotateCcw, Wand2, Upload, Image, FileText, Globe, Mic, User, Building, Heart, Zap, Camera, Music, Save, LogIn } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
 interface VideoSettings {
@@ -31,7 +35,13 @@ interface UploadedFile {
 }
 
 const VideoGenerator = () => {
+  const { user } = useAuth();
+  const { createProject, updateProject } = useVideoData();
+  const navigate = useNavigate();
+  
   const [prompt, setPrompt] = useState("");
+  const [projectName, setProjectName] = useState("");
+  const [currentProject, setCurrentProject] = useState<any>(null);
   const [settings, setSettings] = useState<VideoSettings>({
     platform: "tiktok",
     duration: 30,
@@ -58,6 +68,65 @@ const VideoGenerator = () => {
   const styles = [
     "Cinematic", "Animated", "Realistic", "Artistic", "Documentary", "Fast-paced"
   ];
+
+  const handleSaveProject = async () => {
+    if (!user) {
+      toast({
+        title: "Sign in required",
+        description: "Please sign in to save your projects",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    if (!projectName.trim()) {
+      toast({
+        title: "Project name required",
+        description: "Please enter a project name to save",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    try {
+      const projectData = {
+        project_name: projectName,
+        script_content: generatedScript,
+        voice_settings: { voice: settings.voice, language: settings.language },
+        style_settings: { 
+          platform: settings.platform,
+          style: settings.style,
+          duration: settings.duration,
+          quality: settings.quality,
+          industry: settings.industry,
+          tone: settings.tone,
+          povStyle: settings.povStyle
+        },
+        media_assets: uploadedFiles
+      };
+
+      if (currentProject) {
+        await updateProject(currentProject.id, projectData);
+        toast({
+          title: "Project updated!",
+          description: "Your project has been saved successfully"
+        });
+      } else {
+        const newProject = await createProject(projectData);
+        setCurrentProject(newProject);
+        toast({
+          title: "Project saved!",
+          description: "Your project has been created successfully"
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Save failed",
+        description: "Could not save project. Please try again.",
+        variant: "destructive"
+      });
+    }
+  };
 
   const handleGenerate = async () => {
     if (!prompt.trim()) {
@@ -114,6 +183,23 @@ const VideoGenerator = () => {
 
   return (
     <div className="max-w-7xl mx-auto p-6 space-y-12">
+      {/* Authentication Warning */}
+      {!user && (
+        <Alert className="max-w-4xl mx-auto">
+          <LogIn className="h-4 w-4" />
+          <AlertDescription>
+            <strong>Sign in to unlock full features:</strong> Save projects, access templates, and track your video performance.{' '}
+            <Button 
+              variant="link" 
+              className="p-0 h-auto font-semibold"
+              onClick={() => navigate('/auth')}
+            >
+              Sign in now
+            </Button>
+          </AlertDescription>
+        </Alert>
+      )}
+
       <div className="text-center space-y-6">
         <div className="inline-flex items-center px-6 py-3 rounded-full glass-effect border border-primary/30">
           <Wand2 className="w-5 h-5 text-primary mr-2 animate-pulse" />
@@ -465,6 +551,19 @@ const VideoGenerator = () => {
               </TabsContent>
             </Tabs>
 
+            {/* Project Name for Logged In Users */}
+            {user && (
+              <div className="space-y-3">
+                <label className="text-sm font-medium">Project Name</label>
+                <Input
+                  placeholder="My Awesome Video Project"
+                  value={projectName}
+                  onChange={(e) => setProjectName(e.target.value)}
+                  className="text-base"
+                />
+              </div>
+            )}
+
             {/* Prompt Input */}
             <div className="space-y-3">
               <label className="text-sm font-medium">Video Idea</label>
@@ -495,6 +594,18 @@ const VideoGenerator = () => {
                 </>
               )}
             </Button>
+
+            {/* Save Project Button for Logged In Users */}
+            {user && generatedScript && (
+              <Button 
+                onClick={handleSaveProject}
+                variant="outline"
+                className="w-full"
+              >
+                <Save className="h-4 w-4 mr-2" />
+                {currentProject ? 'Update Project' : 'Save Project'}
+              </Button>
+            )}
           </CardContent>
         </Card>
 
