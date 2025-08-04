@@ -145,10 +145,18 @@ export const TemplateLibrary = ({ onSelectTemplate }: TemplateLibraryProps) => {
       });
       return;
     }
+    
     onSelectTemplate(template);
+    
+    // Navigate to generator tab with template applied
+    const generatorTab = document.querySelector('[value="generator"]') as HTMLElement;
+    if (generatorTab) {
+      generatorTab.click();
+    }
+    
     toast({
       title: "Template selected!",
-      description: `Using ${template.title} template for your project`
+      description: `Applied ${template.title} template. Check the generator tab!`
     });
   };
 

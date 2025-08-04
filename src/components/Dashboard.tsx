@@ -106,7 +106,10 @@ export const Dashboard = () => {
           <h1 className="text-3xl font-bold gradient-text">Dashboard</h1>
           <p className="text-muted-foreground mt-1">Manage your video projects and track performance</p>
         </div>
-        <Button className="premium-button">
+        <Button 
+          className="premium-button"
+          onClick={() => window.location.href = "/#video-generator"}
+        >
           <Plus className="h-4 w-4 mr-2" />
           Create New Video
         </Button>

@@ -131,7 +131,7 @@ const VideoGenerator = () => {
   const handleGenerate = async () => {
     if (!prompt.trim()) {
       toast({
-        title: "Error",
+        title: "Error", 
         description: "Please enter a video description",
         variant: "destructive"
       });
@@ -141,36 +141,73 @@ const VideoGenerator = () => {
     setIsGenerating(true);
     
     try {
-      // Show realistic progress
+      // Show realistic progress with toast notifications
       toast({
-        title: "Starting Generation",
+        title: "🚀 Starting Generation",
         description: "Analyzing your prompt and setting up video parameters..."
       });
 
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // First phase - analyzing prompt
+      await new Promise(resolve => setTimeout(resolve, 1500));
       
       toast({
-        title: "Processing",
-        description: "Creating your AI video... This may take a moment."
+        title: "🎬 Creating Content",
+        description: "Generating script and visuals based on your settings..."
       });
 
-      await new Promise(resolve => setTimeout(resolve, 3000));
+      // Second phase - content creation
+      await new Promise(resolve => setTimeout(resolve, 2500));
 
-      // Generate script and video
-      const sampleScript = `🎬 ${prompt}\n\n✨ Transform your day with this amazing tip!\n\n🔥 Did you know that small changes can make HUGE differences?\n\n💫 Try this simple trick and watch the magic happen!\n\n👀 Watch till the end for the best part!\n\n#viral #amazing #tips #transformation`;
-      setGeneratedScript(sampleScript);
+      // Generate contextual script based on prompt and settings
+      const generateScript = () => {
+        const hooks = [
+          "🔥 This will blow your mind!",
+          "✨ You won't believe what happens next!",
+          "💡 The secret nobody talks about:",
+          "🚨 ATTENTION! This changes everything:",
+          "⭐ The #1 thing you need to know:"
+        ];
+        
+        const endings = [
+          "👀 Watch till the end for the best part!",
+          "💬 Comment below what you think!",
+          "🔥 Tag someone who needs to see this!",
+          "❤️ Like if this helped you!",
+          "🔄 Share to spread the knowledge!"
+        ];
+        
+        const hook = hooks[Math.floor(Math.random() * hooks.length)];
+        const ending = endings[Math.floor(Math.random() * endings.length)];
+        
+        const hashtags = {
+          tiktok: "#fyp #viral #trending #amazing #tips",
+          instagram: "#reels #instagram #viral #explore #tips", 
+          youtube: "#shorts #viral #youtube #trending #tips"
+        };
+        
+        return `${hook}\n\n🎯 ${prompt}\n\n💫 This ${settings.industry} tip will transform your approach!\n\n🎪 Style: ${settings.style.charAt(0).toUpperCase() + settings.style.slice(1)}\n⏱️ Perfect ${settings.duration}s format for ${settings.platform}\n\n${ending}\n\n${hashtags[settings.platform as keyof typeof hashtags]}`;
+      };
       
-      const videoId = Math.random().toString(36).substring(2, 15);
-      setGeneratedVideo(`https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4`);
+      setGeneratedScript(generateScript());
+      
+      // Generate video URL (demo video for now)
+      const demoVideos = [
+        "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+        "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
+      ];
+      
+      setGeneratedVideo(demoVideos[Math.floor(Math.random() * demoVideos.length)]);
       
       toast({
         title: "✨ Video Generated Successfully!",
-        description: `Your ${settings.platform} video is ready! Duration: ${settings.duration}s, Style: ${settings.style}`
+        description: `Your ${settings.platform} video is ready! Duration: ${settings.duration}s, Style: ${settings.style}`,
       });
+      
     } catch (error) {
       toast({
         title: "Generation Failed",
-        description: "Something went wrong. Please check your connection and try again.",
+        description: "Something went wrong. Please try again.",
         variant: "destructive"
       });
       console.error("Video generation error:", error);
