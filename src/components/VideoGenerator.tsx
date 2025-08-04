@@ -13,6 +13,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useVideoData } from "@/hooks/useVideoData";
 import { Play, Download, Sparkles, Clock, Smartphone, MonitorPlay, Copy, RotateCcw, Wand2, Upload, Image, FileText, Globe, Mic, User, Building, Heart, Zap, Camera, Music, Save, LogIn } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface VideoSettings {
   platform: string;
@@ -249,42 +250,49 @@ const VideoGenerator = () => {
         description: "Writing engaging content based on your video idea..."
       });
 
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      await new Promise(resolve => setTimeout(resolve, 1000));
       
       const contextualScript = generateContextualScript(promptAnalysis);
       setGeneratedScript(contextualScript);
       
-      // Phase 4: Generate video (using demo for now, but with context)
+      // Phase 4: Generate actual video using AI
       toast({
-        title: "🎥 Rendering Video",
-        description: `Creating ${settings.style} style video with ${settings.duration}s duration...`
+        title: "🎥 Generating AI Video",
+        description: `Creating ${settings.style} style video... This may take a few minutes.`
       });
 
-      await new Promise(resolve => setTimeout(resolve, 2500));
-      
-      // Select demo video based on prompt content (more contextual)
-      const getContextualVideo = () => {
-        if (promptAnalysis.settings.includes('city') || promptAnalysis.settings.includes('street')) {
-          return "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4";
-        } else if (promptAnalysis.visualElements.includes('rain') || promptAnalysis.moods.includes('old')) {
-          return "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4";
-        } else {
-          return "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
+      // Call the video generation edge function
+      const { data: videoData, error: videoError } = await supabase.functions.invoke('generate-video', {
+        body: {
+          prompt: prompt,
+          settings: settings
         }
-      };
-      
-      setGeneratedVideo(getContextualVideo());
-      
-      toast({
-        title: "✅ Video Generated Successfully!",
-        description: `Your ${settings.platform} video captures: ${promptAnalysis.visualElements.slice(0, 3).join(', ')}`,
-        duration: 6000
       });
+
+      if (videoError) {
+        throw new Error(`Video generation failed: ${videoError.message}`);
+      }
+
+      if (videoData?.success) {
+        setGeneratedVideo(videoData.videoUrl);
+        
+        const successMessage = videoData.isDemo 
+          ? "Demo video generated! Connect Runway API for real AI videos."
+          : "AI video generated successfully!";
+          
+        toast({
+          title: "✅ Video Ready!",
+          description: `${successMessage} Video captures: ${promptAnalysis.visualElements.slice(0, 3).join(', ')}`,
+          duration: 6000
+        });
+      } else {
+        throw new Error('Video generation returned no result');
+      }
       
     } catch (error) {
       toast({
         title: "Generation Failed",
-        description: "Something went wrong. Please try again.",
+        description: error instanceof Error ? error.message : "Something went wrong. Please try again.",
         variant: "destructive"
       });
       console.error("Video generation error:", error);
