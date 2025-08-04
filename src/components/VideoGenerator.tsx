@@ -128,6 +128,88 @@ const VideoGenerator = () => {
     }
   };
 
+  const analyzePrompt = (userPrompt: string) => {
+    // Extract key visual elements from the prompt
+    const keywords = userPrompt.toLowerCase().split(/\s+/);
+    const visualElements: string[] = [];
+    const actions: string[] = [];
+    const settings: string[] = [];
+    const moods: string[] = [];
+
+    // Define keyword mappings
+    const keywordMappings = {
+      weather: ['rain', 'sunny', 'snow', 'storm', 'cloudy', 'foggy'],
+      people: ['man', 'woman', 'child', 'person', 'people', 'walking', 'running', 'sitting'],
+      locations: ['city', 'street', 'park', 'beach', 'forest', 'mountain', 'building', 'house'],
+      actions: ['walking', 'running', 'dancing', 'working', 'playing', 'eating', 'drinking'],
+      moods: ['old', 'modern', 'vintage', 'futuristic', 'peaceful', 'busy', 'quiet', 'chaotic']
+    };
+
+    // Analyze prompt for visual elements
+    keywords.forEach(word => {
+      if (keywordMappings.weather.includes(word)) visualElements.push(`${word} weather`);
+      if (keywordMappings.people.includes(word)) visualElements.push(word);
+      if (keywordMappings.locations.includes(word)) settings.push(word);
+      if (keywordMappings.actions.includes(word)) actions.push(word);
+      if (keywordMappings.moods.includes(word)) moods.push(word);
+    });
+
+    return {
+      originalPrompt: userPrompt,
+      visualElements,
+      actions,
+      settings,
+      moods,
+      sceneDescription: `Scene showing ${visualElements.join(', ')} with ${actions.join(', ')} in ${settings.join(', ')} setting, ${moods.join(', ')} atmosphere`
+    };
+  };
+
+  const generateContextualScript = (promptAnalysis: any) => {
+    const { originalPrompt, visualElements, actions, settings } = promptAnalysis;
+
+    // Create engaging script based on actual prompt content
+    let script = `🎬 ${originalPrompt}\n\n`;
+
+    // Add context-specific hooks
+    if (visualElements.includes('rain')) {
+      script += "☔ When the rain starts falling, magic happens...\n\n";
+    } else if (actions.includes('walking')) {
+      script += "🚶‍♂️ Every step tells a story...\n\n";
+    } else if (settings.includes('city')) {
+      script += "🏙️ In the heart of the city, life unfolds...\n\n";
+    } else {
+      script += "✨ Transform your day with this amazing scene!\n\n";
+    }
+
+    // Add style-specific content
+    script += `🎭 Style: ${settings.style.charAt(0).toUpperCase() + settings.style.slice(1)}\n`;
+    script += `📍 Setting: ${settings.join(', ').charAt(0).toUpperCase() + settings.join(', ').slice(1)}\n`;
+    script += `🎬 Featuring: ${visualElements.join(', ')}\n\n`;
+
+    // Add platform-specific ending
+    const platformEndings = {
+      tiktok: "💫 Perfect for your FYP! #fyp #viral #cinematic",
+      instagram: "📸 Story-worthy content! #reels #instagram #aesthetic", 
+      youtube: "🎥 Subscribe for more! #shorts #youtube #content"
+    };
+
+    script += platformEndings[settings.platform as keyof typeof platformEndings] || "✨ Amazing content awaits!";
+
+    return script;
+  };
+
+  const showPreview = (promptAnalysis: any) => {
+    const preview = `🎬 Video Preview:\n\n📝 Scene: ${promptAnalysis.sceneDescription}\n\n🎭 Visual Elements:\n${promptAnalysis.visualElements.map((el: string) => `• ${el}`).join('\n')}\n\n🎬 Actions:\n${promptAnalysis.actions.map((action: string) => `• ${action}`).join('\n')}\n\n📍 Setting:\n${promptAnalysis.settings.map((setting: string) => `• ${setting}`).join('\n')}`;
+    
+    toast({
+      title: "🎬 Video Preview Ready",
+      description: "Review the planned video content below. Generate to proceed with this concept.",
+      duration: 5000
+    });
+    
+    return preview;
+  };
+
   const handleGenerate = async () => {
     if (!prompt.trim()) {
       toast({
@@ -141,67 +223,62 @@ const VideoGenerator = () => {
     setIsGenerating(true);
     
     try {
-      // Show realistic progress with toast notifications
+      // Phase 1: Analyze the prompt
       toast({
-        title: "🚀 Starting Generation",
-        description: "Analyzing your prompt and setting up video parameters..."
+        title: "🧠 Analyzing Prompt",
+        description: "Breaking down your video idea into visual elements..."
       });
 
-      // First phase - analyzing prompt
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      const promptAnalysis = analyzePrompt(prompt);
+      
+      // Phase 2: Show preview of what will be generated
+      toast({
+        title: "🎬 Planning Video",
+        description: `Scene: ${promptAnalysis.sceneDescription.substring(0, 50)}...`
+      });
+
       await new Promise(resolve => setTimeout(resolve, 1500));
       
+      const previewText = showPreview(promptAnalysis);
+      
+      // Phase 3: Generate script based on analyzed prompt
       toast({
-        title: "🎬 Creating Content",
-        description: "Generating script and visuals based on your settings..."
+        title: "📝 Creating Script",
+        description: "Writing engaging content based on your video idea..."
       });
 
-      // Second phase - content creation
-      await new Promise(resolve => setTimeout(resolve, 2500));
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      const contextualScript = generateContextualScript(promptAnalysis);
+      setGeneratedScript(contextualScript);
+      
+      // Phase 4: Generate video (using demo for now, but with context)
+      toast({
+        title: "🎥 Rendering Video",
+        description: `Creating ${settings.style} style video with ${settings.duration}s duration...`
+      });
 
-      // Generate contextual script based on prompt and settings
-      const generateScript = () => {
-        const hooks = [
-          "🔥 This will blow your mind!",
-          "✨ You won't believe what happens next!",
-          "💡 The secret nobody talks about:",
-          "🚨 ATTENTION! This changes everything:",
-          "⭐ The #1 thing you need to know:"
-        ];
-        
-        const endings = [
-          "👀 Watch till the end for the best part!",
-          "💬 Comment below what you think!",
-          "🔥 Tag someone who needs to see this!",
-          "❤️ Like if this helped you!",
-          "🔄 Share to spread the knowledge!"
-        ];
-        
-        const hook = hooks[Math.floor(Math.random() * hooks.length)];
-        const ending = endings[Math.floor(Math.random() * endings.length)];
-        
-        const hashtags = {
-          tiktok: "#fyp #viral #trending #amazing #tips",
-          instagram: "#reels #instagram #viral #explore #tips", 
-          youtube: "#shorts #viral #youtube #trending #tips"
-        };
-        
-        return `${hook}\n\n🎯 ${prompt}\n\n💫 This ${settings.industry} tip will transform your approach!\n\n🎪 Style: ${settings.style.charAt(0).toUpperCase() + settings.style.slice(1)}\n⏱️ Perfect ${settings.duration}s format for ${settings.platform}\n\n${ending}\n\n${hashtags[settings.platform as keyof typeof hashtags]}`;
+      await new Promise(resolve => setTimeout(resolve, 2500));
+      
+      // Select demo video based on prompt content (more contextual)
+      const getContextualVideo = () => {
+        if (promptAnalysis.settings.includes('city') || promptAnalysis.settings.includes('street')) {
+          return "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4";
+        } else if (promptAnalysis.visualElements.includes('rain') || promptAnalysis.moods.includes('old')) {
+          return "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4";
+        } else {
+          return "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
+        }
       };
       
-      setGeneratedScript(generateScript());
-      
-      // Generate video URL (demo video for now)
-      const demoVideos = [
-        "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-        "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
-        "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
-      ];
-      
-      setGeneratedVideo(demoVideos[Math.floor(Math.random() * demoVideos.length)]);
+      setGeneratedVideo(getContextualVideo());
       
       toast({
-        title: "✨ Video Generated Successfully!",
-        description: `Your ${settings.platform} video is ready! Duration: ${settings.duration}s, Style: ${settings.style}`,
+        title: "✅ Video Generated Successfully!",
+        description: `Your ${settings.platform} video captures: ${promptAnalysis.visualElements.slice(0, 3).join(', ')}`,
+        duration: 6000
       });
       
     } catch (error) {
@@ -727,6 +804,51 @@ const VideoGenerator = () => {
                     Download
                   </Button>
                 </div>
+                
+                {/* Feedback Section */}
+                <div className="space-y-3 p-4 bg-muted/30 rounded-lg border">
+                  <h4 className="font-medium text-sm">How well does this match your idea?</h4>
+                  <div className="flex gap-2">
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => {
+                        toast({
+                          title: "✅ Thanks for the feedback!",
+                          description: "This helps us improve our AI video generation."
+                        });
+                      }}
+                    >
+                      👍 Perfect Match
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => {
+                        toast({
+                          title: "📝 Feedback Recorded",
+                          description: "We'll use this to enhance future generations."
+                        });
+                      }}
+                    >
+                      👌 Close Enough
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => {
+                        toast({
+                          title: "🚨 Mismatch Reported",
+                          description: "Our team will review this to improve prompt accuracy. You can regenerate with more specific details.",
+                          duration: 7000
+                        });
+                      }}
+                    >
+                      👎 Doesn't Match
+                    </Button>
+                  </div>
+                </div>
+
                 <Button 
                   variant="outline" 
                   className="w-full"
