@@ -280,16 +280,31 @@ const VideoGenerator = () => {
         if (videoData.isDemo) {
           toast({
             title: "⚠️ Demo Video Generated",
-            description: "This is a demo video. Add your Runway API key in Supabase settings to generate real AI videos.",
+            description: videoData.message || "This is a demo video. Add API keys in Supabase settings to generate real AI videos.",
             duration: 8000,
             variant: "destructive"
           });
         } else {
+          const platformName = videoData.platform || "AI";
+          const isStaticImage = videoData.isStaticImage;
+          
           toast({
-            title: "🎉 Real AI Video Generated!",
-            description: `Successfully created with Runway ML! Video captures: ${promptAnalysis.visualElements.slice(0, 3).join(', ')}`,
-            duration: 6000
+            title: `🎉 ${isStaticImage ? 'Image' : 'Video'} Generated!`,
+            description: `Successfully created with ${platformName}! ${isStaticImage ? 'Static image as fallback.' : `Video captures: ${promptAnalysis.visualElements.slice(0, 3).join(', ')}`}`,
+            duration: 8000
           });
+        }
+        
+        // Show detailed error information if available
+        if (videoData.errors && videoData.errors.length > 0) {
+          console.log('API errors encountered:', videoData.errors);
+          setTimeout(() => {
+            toast({
+              title: "ℹ️ API Status",
+              description: `Some APIs failed: ${videoData.errors.slice(0, 2).join(', ')}. ${videoData.platform ? `Successfully used ${videoData.platform}.` : ''}`,
+              duration: 6000
+            });
+          }, 2000);
         }
       } else {
         throw new Error('Video generation returned no result');
