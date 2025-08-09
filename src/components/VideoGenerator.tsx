@@ -270,21 +270,27 @@ const VideoGenerator = () => {
       });
 
       if (videoError) {
+        console.error('Supabase function error:', videoError);
         throw new Error(`Video generation failed: ${videoError.message}`);
       }
 
       if (videoData?.success) {
         setGeneratedVideo(videoData.videoUrl);
         
-        const successMessage = videoData.isDemo 
-          ? "Demo video generated! Connect Runway API for real AI videos."
-          : "AI video generated successfully!";
-          
-        toast({
-          title: "✅ Video Ready!",
-          description: `${successMessage} Video captures: ${promptAnalysis.visualElements.slice(0, 3).join(', ')}`,
-          duration: 6000
-        });
+        if (videoData.isDemo) {
+          toast({
+            title: "⚠️ Demo Video Generated",
+            description: "This is a demo video. Add your Runway API key in Supabase settings to generate real AI videos.",
+            duration: 8000,
+            variant: "destructive"
+          });
+        } else {
+          toast({
+            title: "🎉 Real AI Video Generated!",
+            description: `Successfully created with Runway ML! Video captures: ${promptAnalysis.visualElements.slice(0, 3).join(', ')}`,
+            duration: 6000
+          });
+        }
       } else {
         throw new Error('Video generation returned no result');
       }

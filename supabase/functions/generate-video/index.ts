@@ -73,8 +73,10 @@ serve(async (req) => {
       });
     }
 
-    // Real AI video generation with Runway ML
-    const runwayResponse = await fetch('https://api.runwayml.com/v1/image_to_video', {
+    // Real AI video generation with Runway ML Gen-3 Alpha
+    console.log('Using Runway API for real video generation');
+    
+    const runwayResponse = await fetch('https://api.runwayml.com/v1/generate', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${runwayApiKey}`,
@@ -82,26 +84,41 @@ serve(async (req) => {
       },
       body: JSON.stringify({
         model: 'gen3a_turbo',
-        prompt_text: prompt,
-        duration: settings.duration || 5,
-        ratio: settings.platform === 'tiktok' ? '9:16' : '16:9',
+        prompt: prompt,
+        duration: Math.min(settings.duration || 5, 10), // Runway supports up to 10 seconds
+        aspect_ratio: settings.platform === 'tiktok' || settings.platform === 'instagram' ? '9:16' : '16:9',
+        seed: Math.floor(Math.random() * 1000000),
         watermark: false
       }),
     });
 
-    const runwayData = await runwayResponse.json();
-    
+    console.log('Runway API response status:', runwayResponse.status);
+
     if (!runwayResponse.ok) {
-      throw new Error(`Runway API error: ${runwayData.error || 'Unknown error'}`);
+      const errorText = await runwayResponse.text();
+      console.error('Runway API error response:', errorText);
+      throw new Error(`Runway API error (${runwayResponse.status}): ${errorText}`);
     }
 
-    // Poll for completion
+    const runwayData = await runwayResponse.json();
+    console.log('Runway API response data:', runwayData);
+    
     const taskId = runwayData.id;
+    if (!taskId) {
+      throw new Error('No task ID received from Runway API');
+    }
+
+    console.log('Video generation started, task ID:', taskId);
+
+    // Poll for completion
     let attempts = 0;
-    const maxAttempts = 60; // 5 minutes max wait time
+    const maxAttempts = 120; // 10 minutes max wait time (5 second intervals)
     
     while (attempts < maxAttempts) {
       await new Promise(resolve => setTimeout(resolve, 5000)); // Wait 5 seconds
+      attempts++;
+      
+      console.log(`Checking status attempt ${attempts}/${maxAttempts}`);
       
       const statusResponse = await fetch(`https://api.runwayml.com/v1/tasks/${taskId}`, {
         headers: {
@@ -109,26 +126,41 @@ serve(async (req) => {
         },
       });
       
-      const statusData = await statusResponse.json();
+      if (!statusResponse.ok) {
+        console.error('Status check failed:', statusResponse.status);
+        continue; // Continue trying
+      }
       
-      if (statusData.status === 'COMPLETED') {
+      const statusData = await statusResponse.json();
+      console.log('Status data:', statusData);
+      
+      if (statusData.status === 'SUCCEEDED' || statusData.status === 'COMPLETED') {
+        const videoUrl = statusData.output?.[0] || statusData.artifacts?.[0]?.url;
+        if (!videoUrl) {
+          throw new Error('No video URL in completed response');
+        }
+        
+        console.log('Video generation completed successfully:', videoUrl);
+        
         return new Response(JSON.stringify({
           success: true,
-          videoUrl: statusData.output[0],
-          thumbnailUrl: statusData.output[0].replace('.mp4', '_thumb.jpg'),
+          videoUrl: videoUrl,
+          thumbnailUrl: videoUrl.replace('.mp4', '_thumb.jpg'),
           taskId: taskId,
-          isDemo: false
+          isDemo: false,
+          message: "Real AI video generated successfully with Runway ML!"
         }), {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         });
-      } else if (statusData.status === 'FAILED') {
-        throw new Error('Video generation failed');
+      } else if (statusData.status === 'FAILED' || statusData.status === 'ERROR') {
+        throw new Error(`Video generation failed: ${statusData.failure_reason || 'Unknown error'}`);
       }
       
-      attempts++;
+      // Status is still RUNNING/PENDING, continue polling
+      console.log(`Video generation in progress... (${statusData.status})`);
     }
     
-    throw new Error('Video generation timed out');
+    throw new Error('Video generation timed out after 10 minutes');
 
   } catch (error) {
     console.error('Error in generate-video function:', error);
