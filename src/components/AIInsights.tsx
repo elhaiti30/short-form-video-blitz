@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -19,52 +19,50 @@ import {
   ThumbsUp,
   MessageSquare
 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
 
 export const AIInsights = () => {
   const [activeTab, setActiveTab] = useState("recommendations");
+  const { user } = useAuth();
+  const [insights, setInsights] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
 
-  const recommendations = [
-    {
-      type: "optimization",
-      priority: "high",
-      title: "Optimal Upload Time",
-      description: "Your audience is most active on Tuesday at 2:00 PM. Consider scheduling your next video then.",
-      impact: "+23% engagement expected",
-      action: "Schedule Next Video",
-      icon: Clock,
-      color: "text-red-500"
-    },
-    {
-      type: "content",
-      priority: "medium",
-      title: "Trending Topic Opportunity",
-      description: "AI development content is trending in your niche. Create content around this topic.",
-      impact: "+15% reach potential",
-      action: "Generate Script",
-      icon: TrendingUp,
-      color: "text-orange-500"
-    },
-    {
-      type: "technical",
-      priority: "high",
-      title: "Video Length Optimization",
-      description: "Your 3-4 minute videos perform 40% better than longer content.",
-      impact: "Improved retention",
-      action: "Apply to Templates",
-      icon: BarChart3,
-      color: "text-red-500"
-    },
-    {
-      type: "engagement",
-      priority: "low",
-      title: "Call-to-Action Enhancement",
-      description: "Add interactive elements in the first 15 seconds to boost engagement.",
-      impact: "+8% interaction rate",
-      action: "Update Templates",
-      icon: Target,
-      color: "text-green-500"
+  useEffect(() => {
+    let isMounted = true;
+    if (!user) {
+      setInsights([]);
+      return;
     }
-  ];
+    setLoading(true);
+    supabase
+      .from('ai_insights')
+      .select('*')
+      .eq('user_id', user.id)
+      .order('created_at', { ascending: false })
+      .then(({ data, error }) => {
+        if (isMounted) {
+          if (!error && data) setInsights(data);
+          setLoading(false);
+        }
+      });
+    return () => { isMounted = false };
+  }, [user]);
+
+  const getIconMeta = (type?: string) => {
+    switch (type) {
+      case 'optimization':
+        return { icon: Clock, color: 'text-red-500' };
+      case 'content':
+        return { icon: TrendingUp, color: 'text-orange-500' };
+      case 'technical':
+        return { icon: BarChart3, color: 'text-red-500' };
+      case 'engagement':
+        return { icon: Target, color: 'text-green-500' };
+      default:
+        return { icon: Brain, color: 'text-primary' };
+    }
+  };
 
   const performancePredictions = [
     {
@@ -174,34 +172,44 @@ export const AIInsights = () => {
 
         <TabsContent value="recommendations" className="space-y-4">
           <div className="grid gap-4">
-            {recommendations.map((rec, index) => {
-              const IconComponent = rec.icon;
+            {(loading ? [] : insights).map((rec, index) => {
+              const { icon: IconComponent, color } = getIconMeta(rec.insight_type);
               return (
                 <Card key={index} className="border-l-4 border-l-primary">
                   <CardHeader className="pb-3">
                     <div className="flex items-start justify-between">
                       <div className="flex items-center gap-3">
-                        <IconComponent className={`h-5 w-5 ${rec.color}`} />
+                        <IconComponent className={`h-5 w-5 ${color}`} />
                         <div>
                           <CardTitle className="text-lg">{rec.title}</CardTitle>
-                          <Badge className={`text-xs ${getPriorityColor(rec.priority)}`}>
-                            {rec.priority} priority
+                          <Badge className={`text-xs ${getPriorityColor(rec.priority || 'medium')}`}>
+                            {(rec.priority || 'medium')} priority
                           </Badge>
                         </div>
                       </div>
-                      <Button size="sm">{rec.action}</Button>
+                      <Button size="sm">{rec.data?.action || 'View Insight'}</Button>
                     </div>
                   </CardHeader>
                   <CardContent>
                     <p className="text-muted-foreground mb-2">{rec.description}</p>
-                    <div className="flex items-center gap-2">
-                      <Zap className="h-4 w-4 text-yellow-500" />
-                      <span className="text-sm font-medium text-green-600">{rec.impact}</span>
-                    </div>
+                    {rec.data?.impact && (
+                      <div className="flex items-center gap-2">
+                        <Zap className="h-4 w-4 text-yellow-500" />
+                        <span className="text-sm font-medium text-green-600">{rec.data.impact}</span>
+                      </div>
+                    )}
                   </CardContent>
                 </Card>
               );
             })}
+            {!loading && insights.length === 0 && (
+              <Card>
+                <CardHeader>
+                  <CardTitle>No insights yet</CardTitle>
+                  <CardDescription>Generate and publish videos to see AI insights here.</CardDescription>
+                </CardHeader>
+              </Card>
+            )}
           </div>
         </TabsContent>
 

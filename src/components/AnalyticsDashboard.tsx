@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -20,24 +20,49 @@ import {
   MessageCircle,
   RefreshCw
 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
 
 export const AnalyticsDashboard = () => {
   const [selectedPeriod, setSelectedPeriod] = useState("7d");
   const [activeMetric, setActiveMetric] = useState("engagement");
+  const { user } = useAuth();
+  const [videos, setVideos] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (!user) {
+      setVideos([]);
+      return;
+    }
+    supabase
+      .from('videos')
+      .select('*')
+      .eq('user_id', user.id)
+      .then(({ data }) => setVideos(data || []));
+  }, [user]);
+
+  const totalViews = videos.reduce((acc, v) => acc + (Number(v.views_count) || 0), 0);
+  const totalLikes = videos.reduce((acc, v) => acc + (Number(v.likes_count) || 0), 0);
+  const totalComments = videos.reduce((acc, v) => acc + (Number(v.comments_count) || 0), 0);
+  const publicCount = videos.filter(v => v.is_public !== false).length;
 
   const performanceMetrics = [
-    { label: "Total Views", value: "2.4M", change: "+12.5%", trend: "up" },
-    { label: "Engagement Rate", value: "8.7%", change: "+2.1%", trend: "up" },
-    { label: "Average Watch Time", value: "3:24", change: "-0:12", trend: "down" },
-    { label: "Click-through Rate", value: "4.2%", change: "+0.8%", trend: "up" },
+    { label: "Total Views", value: totalViews.toLocaleString(), change: "", trend: "up" },
+    { label: "Total Likes", value: totalLikes.toLocaleString(), change: "", trend: "up" },
+    { label: "Total Comments", value: totalComments.toLocaleString(), change: "", trend: "up" },
+    { label: "Public Videos", value: String(publicCount), change: "", trend: "up" },
   ];
 
-  const topVideos = [
-    { title: "Product Demo Video", views: "485K", engagement: 9.2, duration: "2:45" },
-    { title: "Customer Success Story", views: "312K", engagement: 8.7, duration: "4:12" },
-    { title: "Behind the Scenes", views: "298K", engagement: 7.9, duration: "3:33" },
-    { title: "Tutorial Series Ep.1", views: "276K", engagement: 8.4, duration: "5:21" },
-  ];
+  const topVideos = videos
+    .slice()
+    .sort((a, b) => (Number(b.views_count) || 0) - (Number(a.views_count) || 0))
+    .slice(0, 4)
+    .map(v => ({
+      title: v.title,
+      views: (Number(v.views_count) || 0).toLocaleString(),
+      engagement: 0,
+      duration: ''
+    }));
 
   const audienceInsights = [
     { demographic: "25-34 years", percentage: 42, color: "bg-primary" },

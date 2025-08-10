@@ -58,6 +58,7 @@ const VideoGenerator = () => {
   const [generatedVideo, setGeneratedVideo] = useState<string | null>(null);
   const [generatedScript, setGeneratedScript] = useState<string>("");
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
+  const [isStaticImageResult, setIsStaticImageResult] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const platforms = [
@@ -276,6 +277,7 @@ const VideoGenerator = () => {
 
       if (videoData?.success) {
         setGeneratedVideo(videoData.videoUrl);
+        setIsStaticImageResult(!!videoData.isStaticImage);
         
         if (videoData.isDemo) {
           toast({
@@ -767,12 +769,20 @@ const VideoGenerator = () => {
             <div className="aspect-[9/16] max-h-[500px] mx-auto premium-card">
               {generatedVideo ? (
                 <div className="relative h-full">
-                  <video
-                    src={generatedVideo}
-                    controls
-                    className="w-full h-full object-cover rounded-lg"
-                    poster="/placeholder.svg"
-                  />
+                  {isStaticImageResult ? (
+                    <img
+                      src={generatedVideo}
+                      alt="AI generated visual preview"
+                      className="w-full h-full object-cover rounded-lg"
+                    />
+                  ) : (
+                    <video
+                      src={generatedVideo}
+                      controls
+                      className="w-full h-full object-cover rounded-lg"
+                      poster="/placeholder.svg"
+                    />
+                  )}
                   <div className="absolute top-4 left-4">
                     <Badge className="glass-effect text-white font-medium px-3 py-1">
                       {currentPlatform?.label}
