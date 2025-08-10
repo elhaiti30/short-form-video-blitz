@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -7,6 +7,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
+import { toast } from "@/hooks/use-toast";
 import { 
   Users, UserPlus, MessageCircle, Send, Clock, CheckCircle, 
   AlertCircle, Crown, Shield, Eye, Edit3, Share2, Settings,
@@ -100,9 +103,63 @@ const projects: Project[] = [
 ];
 
 export const TeamCollaboration = () => {
-  const [selectedProject, setSelectedProject] = useState<Project | null>(projects[0]);
+  const { user } = useAuth();
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [newComment, setNewComment] = useState("");
   const [inviteEmail, setInviteEmail] = useState("");
+  const [realProjects, setRealProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      if (!user) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const { data, error } = await supabase
+          .from('video_projects')
+          .select('*')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false });
+
+        if (error) throw error;
+
+        const mappedProjects: Project[] = data.map(project => {
+          const status = project.generation_status === 'completed' ? 'approved' as const : 'draft' as const;
+          
+          return {
+            id: project.id,
+            title: project.project_name,
+            status,
+            assignedTo: [teamMembers[0]], // Current user
+            dueDate: new Date(project.created_at).toISOString().split('T')[0],
+            comments: []
+          };
+        });
+
+        setRealProjects(mappedProjects);
+        if (mappedProjects.length > 0) {
+          setSelectedProject(mappedProjects[0] as Project);
+        }
+      } catch (error) {
+        console.error('Error fetching projects:', error);
+        toast({
+          title: "Error",
+          description: "Failed to load team projects",
+          variant: "destructive"
+        });
+        // Fallback to demo data
+        setRealProjects(projects);
+        setSelectedProject(projects[0]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProjects();
+  }, [user]);
 
   const handleSendComment = () => {
     if (newComment.trim() && selectedProject) {
@@ -238,7 +295,7 @@ export const TeamCollaboration = () => {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            {projects.map((project) => (
+            {(realProjects.length > 0 ? realProjects : projects).map((project) => (
               <div 
                 key={project.id} 
                 className={`p-4 border rounded-lg cursor-pointer transition-colors ${

@@ -167,17 +167,17 @@ const VideoGenerator = () => {
   };
 
   const generateContextualScript = (promptAnalysis: any) => {
-    const { originalPrompt, visualElements, actions, settings } = promptAnalysis;
+    const { originalPrompt, visualElements, actions, settings } = promptAnalysis || {};
 
     // Create engaging script based on actual prompt content
-    let script = `🎬 ${originalPrompt}\n\n`;
+    let script = `🎬 ${originalPrompt || ''}\n\n`;
 
-    // Add context-specific hooks
-    if (visualElements.includes('rain')) {
+    // Add context-specific hooks with null checks
+    if (visualElements && visualElements.includes('rain')) {
       script += "☔ When the rain starts falling, magic happens...\n\n";
-    } else if (actions.includes('walking')) {
+    } else if (actions && actions.includes('walking')) {
       script += "🚶‍♂️ Every step tells a story...\n\n";
-    } else if (settings.includes('city')) {
+    } else if (settings && settings.includes('city')) {
       script += "🏙️ In the heart of the city, life unfolds...\n\n";
     } else {
       script += "✨ Transform your day with this amazing scene!\n\n";

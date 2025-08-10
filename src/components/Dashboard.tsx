@@ -1,10 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Progress } from "@/components/ui/progress";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
+import { toast } from "@/hooks/use-toast";
 import { 
   Play, Download, Share2, Heart, Eye, MessageCircle, BarChart3, 
   TrendingUp, Users, Clock, Zap, Star, Crown, Calendar, Filter,
@@ -90,10 +93,85 @@ const stats: DashboardStats = {
 };
 
 export const Dashboard = () => {
+  const { user } = useAuth();
   const [selectedFilter, setSelectedFilter] = useState("all");
   const [selectedTimeRange, setSelectedTimeRange] = useState("30d");
+  const [realProjects, setRealProjects] = useState<VideoProject[]>([]);
+  const [realStats, setRealStats] = useState(stats);
+  const [loading, setLoading] = useState(true);
 
-  const filteredProjects = mockProjects.filter(project => {
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      if (!user) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const { data, error } = await supabase
+          .from('video_projects')
+          .select('*')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false });
+
+        if (error) throw error;
+
+        const mappedProjects: VideoProject[] = data.map(project => {
+          const styleSettings = typeof project.style_settings === 'object' && project.style_settings ? project.style_settings as any : {};
+          const status = project.generation_status === "completed" ? "completed" as const : 
+                        project.generation_status === "processing" ? "processing" as const : "draft" as const;
+          
+          return {
+            id: project.id,
+            title: project.project_name,
+            description: typeof project.script_content === 'string' ? 
+              project.script_content.substring(0, 100) + "..." : "No description",
+            thumbnail: "/api/placeholder/300/200",
+            duration: styleSettings.duration || 30,
+            views: Math.floor(Math.random() * 10000), // Mock data
+            likes: Math.floor(Math.random() * 1000),
+            comments: Math.floor(Math.random() * 100),
+            createdAt: project.created_at,
+            status,
+            platform: styleSettings.platform || "youtube",
+            isPublic: false
+          };
+        });
+
+        setRealProjects(mappedProjects);
+        
+        // Update stats based on real data
+        setRealStats({
+          totalVideos: mappedProjects.length,
+          totalViews: mappedProjects.reduce((sum, p) => sum + p.views, 0),
+          totalLikes: mappedProjects.reduce((sum, p) => sum + p.likes, 0),
+          avgEngagement: mappedProjects.length > 0 ? 
+            (mappedProjects.reduce((sum, p) => sum + p.likes, 0) / 
+             mappedProjects.reduce((sum, p) => sum + p.views, 0) * 100) || 0 : 0,
+          creditsUsed: mappedProjects.length * 15, // Estimate
+          creditsTotal: 1000
+        });
+      } catch (error) {
+        console.error('Error fetching dashboard data:', error);
+        toast({
+          title: "Error",
+          description: "Failed to load dashboard data",
+          variant: "destructive"
+        });
+        // Fallback to mock data
+        setRealProjects(mockProjects);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDashboardData();
+  }, [user]);
+
+  const projectsToShow = realProjects.length > 0 ? realProjects : mockProjects;
+  const statsToShow = realProjects.length > 0 ? realStats : stats;
+
+  const filteredProjects = projectsToShow.filter(project => {
     if (selectedFilter === "all") return true;
     return project.status === selectedFilter;
   });
@@ -122,7 +200,7 @@ export const Dashboard = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Total Videos</p>
-                <p className="text-2xl font-bold">{stats.totalVideos}</p>
+                <p className="text-2xl font-bold">{statsToShow.totalVideos}</p>
               </div>
               <Video className="h-8 w-8 text-primary" />
             </div>
@@ -137,7 +215,7 @@ export const Dashboard = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Total Views</p>
-                <p className="text-2xl font-bold">{stats.totalViews.toLocaleString()}</p>
+                <p className="text-2xl font-bold">{statsToShow.totalViews.toLocaleString()}</p>
               </div>
               <Eye className="h-8 w-8 text-primary" />
             </div>
@@ -152,7 +230,7 @@ export const Dashboard = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Engagement</p>
-                <p className="text-2xl font-bold">{stats.avgEngagement}%</p>
+                <p className="text-2xl font-bold">{statsToShow.avgEngagement.toFixed(1)}%</p>
               </div>
               <Heart className="h-8 w-8 text-primary" />
             </div>
@@ -167,12 +245,12 @@ export const Dashboard = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Credits Used</p>
-                <p className="text-2xl font-bold">{stats.creditsUsed}/{stats.creditsTotal}</p>
+                <p className="text-2xl font-bold">{statsToShow.creditsUsed}/{statsToShow.creditsTotal}</p>
               </div>
               <Zap className="h-8 w-8 text-primary" />
             </div>
             <div className="mt-2">
-              <Progress value={(stats.creditsUsed / stats.creditsTotal) * 100} className="h-2" />
+              <Progress value={(statsToShow.creditsUsed / statsToShow.creditsTotal) * 100} className="h-2" />
             </div>
           </CardContent>
         </Card>
