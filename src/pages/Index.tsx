@@ -8,12 +8,13 @@ import { TeamCollaboration } from "@/components/TeamCollaboration";
 import { AnalyticsDashboard } from "@/components/AnalyticsDashboard";
 import { AIInsights } from "@/components/AIInsights";
 import { SmartScheduler } from "@/components/SmartScheduler";
+import { AIScriptGenerator } from "@/components/AIScriptGenerator";
 import PlatformFeatures from "@/components/PlatformFeatures";
 import PricingSection from "@/components/PricingSection";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Video, Layout, Users, Sparkles, BarChart3, Brain, Calendar } from "lucide-react";
+import { Video, Layout, Users, Sparkles, BarChart3, Brain, Calendar, FileText } from "lucide-react";
 
 const Index = () => {
   const [activeSection, setActiveSection] = useState("generator");
@@ -34,7 +35,7 @@ const Index = () => {
         <div className="container mx-auto px-4">
           <Tabs value={activeSection} onValueChange={setActiveSection} className="w-full">
             <div className="flex justify-center mb-8">
-              <TabsList className="grid w-full max-w-4xl grid-cols-7 h-12">
+              <TabsList className="grid w-full max-w-5xl grid-cols-8 h-12">
                 <TabsTrigger value="generator" className="flex items-center gap-2">
                   <Video className="h-4 w-4" />
                   <span className="hidden sm:inline">Create</span>
@@ -62,6 +63,10 @@ const Index = () => {
                 <TabsTrigger value="scheduler" className="flex items-center gap-2">
                   <Calendar className="h-4 w-4" />
                   <span className="hidden sm:inline">Scheduler</span>
+                </TabsTrigger>
+                <TabsTrigger value="script" className="flex items-center gap-2">
+                  <FileText className="h-4 w-4" />
+                  <span className="hidden sm:inline">AI Scripts</span>
                 </TabsTrigger>
               </TabsList>
             </div>
@@ -92,6 +97,10 @@ const Index = () => {
 
             <TabsContent value="scheduler">
               <SmartScheduler />
+            </TabsContent>
+
+            <TabsContent value="script">
+              <AIScriptGenerator />
             </TabsContent>
           </Tabs>
         </div>
