@@ -86,6 +86,54 @@ export type Database = {
         }
         Relationships: []
       }
+      brand_kits: {
+        Row: {
+          accent_color: string | null
+          brand_guidelines: string | null
+          created_at: string
+          font_primary: string | null
+          font_secondary: string | null
+          id: string
+          is_default: boolean | null
+          logo_url: string | null
+          name: string
+          primary_color: string | null
+          secondary_color: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          accent_color?: string | null
+          brand_guidelines?: string | null
+          created_at?: string
+          font_primary?: string | null
+          font_secondary?: string | null
+          id?: string
+          is_default?: boolean | null
+          logo_url?: string | null
+          name: string
+          primary_color?: string | null
+          secondary_color?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          accent_color?: string | null
+          brand_guidelines?: string | null
+          created_at?: string
+          font_primary?: string | null
+          font_secondary?: string | null
+          id?: string
+          is_default?: boolean | null
+          logo_url?: string | null
+          name?: string
+          primary_color?: string | null
+          secondary_color?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       content_categories: {
         Row: {
           description: string | null
@@ -117,6 +165,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      notifications: {
+        Row: {
+          action_url: string | null
+          created_at: string
+          id: string
+          is_read: boolean | null
+          message: string
+          metadata: Json | null
+          title: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          action_url?: string | null
+          created_at?: string
+          id?: string
+          is_read?: boolean | null
+          message: string
+          metadata?: Json | null
+          title: string
+          type?: string
+          user_id: string
+        }
+        Update: {
+          action_url?: string | null
+          created_at?: string
+          id?: string
+          is_read?: boolean | null
+          message?: string
+          metadata?: Json | null
+          title?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       profiles: {
         Row: {
@@ -200,6 +284,48 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      social_accounts: {
+        Row: {
+          access_token: string | null
+          account_metadata: Json | null
+          account_name: string
+          created_at: string
+          id: string
+          is_active: boolean | null
+          platform: string
+          refresh_token: string | null
+          token_expires_at: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          access_token?: string | null
+          account_metadata?: Json | null
+          account_name: string
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          platform: string
+          refresh_token?: string | null
+          token_expires_at?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          access_token?: string | null
+          account_metadata?: Json | null
+          account_name?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          platform?: string
+          refresh_token?: string | null
+          token_expires_at?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       team_members: {
         Row: {
@@ -313,6 +439,39 @@ export type Database = {
           },
         ]
       }
+      video_folders: {
+        Row: {
+          color: string | null
+          created_at: string
+          description: string | null
+          id: string
+          name: string
+          parent_folder_id: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          color?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          name: string
+          parent_folder_id?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          color?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string
+          parent_folder_id?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       video_interactions: {
         Row: {
           created_at: string | null
@@ -351,6 +510,7 @@ export type Database = {
       video_projects: {
         Row: {
           created_at: string
+          folder_id: string | null
           generation_progress: number | null
           generation_status: string | null
           id: string
@@ -366,6 +526,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          folder_id?: string | null
           generation_progress?: number | null
           generation_status?: string | null
           id?: string
@@ -381,6 +542,7 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          folder_id?: string | null
           generation_progress?: number | null
           generation_status?: string | null
           id?: string
