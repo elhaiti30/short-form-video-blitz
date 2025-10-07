@@ -8,6 +8,10 @@ import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
+import Landing from "./pages/Landing";
+import Onboarding from "./pages/Onboarding";
+import Pricing from "./pages/Pricing";
+import Billing from "./pages/Billing";
 
 const queryClient = new QueryClient();
 
@@ -19,9 +23,13 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Index />} />
+            <Route path="/" element={<Landing />} />
+            <Route path="/dashboard" element={<Index />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/onboarding" element={<Onboarding />} />
+            <Route path="/pricing" element={<Pricing />} />
+            <Route path="/billing" element={<Billing />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

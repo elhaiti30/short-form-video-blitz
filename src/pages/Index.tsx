@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
+import AIAssistant from "@/components/AIAssistant";
 import VideoGenerator from "@/components/VideoGenerator";
 import { TemplateLibrary } from "@/components/TemplateLibrary";
 import { Dashboard } from "@/components/Dashboard";
@@ -151,6 +152,7 @@ const Index = () => {
       </div>
       
       <Footer />
+      <AIAssistant />
     </div>
   );
 };

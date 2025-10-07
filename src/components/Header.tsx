@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/hooks/useAuth";
-import { Sparkles, Menu, Video, LogOut, User, Settings } from "lucide-react";
+import { Sparkles, Menu, Video, LogOut, User, Settings, CreditCard } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
 const Header = () => {
@@ -20,7 +20,7 @@ const Header = () => {
     <header className="fixed top-0 left-0 right-0 z-50 glass-effect border-b border-border/40">
       <div className="container flex h-16 max-w-screen-2xl items-center px-4">
         <div className="mr-4 flex">
-          <Link className="mr-6 flex items-center space-x-3" to="/">
+          <Link className="mr-6 flex items-center space-x-3" to={user ? "/dashboard" : "/"}>
             <div className="p-2 rounded-xl bg-gradient-primary animate-pulse-glow">
               <Video className="h-5 w-5 text-white" />
             </div>
@@ -50,17 +50,7 @@ const Header = () => {
             <Button 
               variant="ghost" 
               className="hidden md:inline-flex text-sm"
-              onClick={() => {
-                const pricingSection = document.getElementById('pricing');
-                if (pricingSection) {
-                  pricingSection.scrollIntoView({ behavior: 'smooth' });
-                } else {
-                  toast({
-                    title: "Coming Soon",
-                    description: "Pricing plans will be available soon!",
-                  });
-                }
-              }}
+              onClick={() => navigate('/pricing')}
             >
               Pricing
             </Button>
@@ -84,6 +74,10 @@ const Header = () => {
                   <DropdownMenuItem onClick={() => navigate('/profile')}>
                     <Settings className="mr-2 h-4 w-4" />
                     <span>Profile Settings</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate('/billing')}>
+                    <CreditCard className="mr-2 h-4 w-4" />
+                    <span>Billing</span>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleSignOut}>
