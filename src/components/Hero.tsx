@@ -52,14 +52,14 @@ const Hero = () => {
         {/* Headline */}
         <div className="space-y-6 animate-slide-up" style={{ animationDelay: "0.1s" }}>
           <h1 className="text-5xl md:text-7xl font-bold leading-tight">
-            Create Viral{" "}
-            <span className="text-gradient">Short Videos</span>
+            Turn Your Ideas into{" "}
+            <span className="text-gradient">Viral Short Videos</span>
             <br />
-            with AI Magic
+            — Instantly!
           </h1>
           <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            Transform your ideas into engaging TikTok, Instagram Reels, and YouTube Shorts 
-            in seconds. No editing skills required.
+            Transform your ideas into TikToks, Reels, and Shorts in seconds — no editing skills required. 
+            Harness the power of AI to create stunning, engaging videos your audience will love.
           </p>
         </div>
 

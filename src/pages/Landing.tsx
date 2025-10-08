@@ -17,24 +17,24 @@ const Landing = () => {
   };
 
   const features = [
-    { icon: Zap, title: "Fast Generation", description: "Create videos in under 30 seconds" },
-    { icon: Video, title: "Beautiful Templates", description: "Professional designs ready to use" },
-    { icon: Sparkles, title: "AI Voiceovers", description: "Natural-sounding narration" },
-    { icon: BarChart3, title: "Analytics Dashboard", description: "Track performance metrics" },
-    { icon: Users, title: "Team Collaboration", description: "Work together seamlessly" },
-    { icon: Cloud, title: "Cloud Storage", description: "Access projects anywhere" },
+    { icon: Zap, title: "Fast Generation", description: "Videos ready in under 30 seconds." },
+    { icon: Video, title: "Beautiful Templates", description: "Professionally designed templates for every niche." },
+    { icon: Sparkles, title: "AI Voiceovers", description: "Natural-sounding narration in multiple languages." },
+    { icon: BarChart3, title: "Analytics Dashboard", description: "Track views, engagement, and performance in real-time." },
+    { icon: Users, title: "Team Collaboration", description: "Work together on projects seamlessly." },
+    { icon: Cloud, title: "Cloud Storage", description: "Access your projects anytime, anywhere." },
   ];
 
   const steps = [
-    { number: "1", title: "Enter Your Idea", description: "Type what you want to create" },
-    { number: "2", title: "AI Creates Video", description: "Magic happens in seconds" },
-    { number: "3", title: "Download & Share", description: "Publish to your platform" },
+    { number: "1", title: "Enter Your Idea", description: "Type what you want to create — from tutorials to fun clips." },
+    { number: "2", title: "AI Creates Video", description: "Our AI generates professional videos in seconds — templates, animations, and voiceovers included." },
+    { number: "3", title: "Download & Share", description: "Publish instantly to TikTok, Instagram Reels, or YouTube Shorts." },
   ];
 
   const pricingPreview = [
-    { name: "Starter", price: "Free", highlight: false },
-    { name: "Creator", price: "$19/mo", highlight: true },
-    { name: "Pro", price: "$49/mo", highlight: false },
+    { name: "Starter", price: "Free", description: "Perfect for testing & beginners", highlight: false },
+    { name: "Creator", price: "$19/mo", description: "Most popular — advanced features", highlight: true },
+    { name: "Pro", price: "$49/mo", description: "Professional use & agencies", highlight: false },
   ];
 
   return (
@@ -50,11 +50,11 @@ const Landing = () => {
             </div>
             
             <h1 className="text-5xl md:text-7xl font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
-              Create Viral Short Videos<br />with AI Magic
+              Turn Your Ideas into Viral<br />Short Videos — Instantly!
             </h1>
             
             <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto">
-              Turn your ideas into TikToks, Reels, and Shorts in seconds — no editing skills required.
+              Transform your ideas into TikToks, Reels, and Shorts in seconds — no editing skills required. Harness the power of AI to create stunning, engaging videos your audience will love.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -117,12 +117,13 @@ const Landing = () => {
           
           <div className="grid md:grid-cols-3 gap-6 mb-8">
             {pricingPreview.map((plan, index) => (
-              <Card key={index} className={`p-6 text-center ${plan.highlight ? 'border-primary border-2 shadow-lg' : ''}`}>
+              <Card key={index} className={`p-6 text-center hover:scale-105 transition-transform ${plan.highlight ? 'border-primary border-2 shadow-lg' : ''}`}>
                 {plan.highlight && (
                   <div className="text-xs font-bold text-primary mb-2">MOST POPULAR</div>
                 )}
                 <h3 className="text-2xl font-bold mb-2">{plan.name}</h3>
                 <div className="text-4xl font-bold text-primary mb-4">{plan.price}</div>
+                <p className="text-muted-foreground text-sm">{plan.description}</p>
               </Card>
             ))}
           </div>
