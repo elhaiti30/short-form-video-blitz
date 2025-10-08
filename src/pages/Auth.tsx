@@ -14,7 +14,7 @@ export default function Auth() {
 
   // Redirect if already authenticated
   if (user && !loading) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/onboarding" replace />;
   }
 
   if (loading) {
@@ -46,8 +46,11 @@ export default function Auth() {
     const password = formData.get('password') as string;
     const username = formData.get('username') as string;
     
-    await signUp(email, password, username);
+    const { error } = await signUp(email, password, username);
     setIsLoading(false);
+    
+    // Don't set loading to false if there's no error and email confirmation is needed
+    // The user will be redirected automatically after confirming their email
   };
 
   return (
