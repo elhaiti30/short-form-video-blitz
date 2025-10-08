@@ -36,58 +36,62 @@ const Index = () => {
       <Hero />
       
       {/* Main Application Tabs */}
-      <div className="py-16 bg-card/20">
-        <div className="container mx-auto px-4">
+      <div className="py-8 md:py-16 bg-card/20">
+        <div className="container mx-auto px-2 sm:px-4">
           <Tabs value={activeSection} onValueChange={setActiveSection} className="w-full">
-            <div className="flex justify-center mb-8">
-              <TabsList className="grid w-full max-w-7xl grid-cols-12 h-12">
-                <TabsTrigger value="generator" className="flex items-center gap-2">
-                  <Video className="h-4 w-4" />
-                  <span className="hidden sm:inline">Create</span>
+            <div className="flex justify-start md:justify-center mb-6 md:mb-8 overflow-x-auto scrollbar-hide">
+              <TabsList className="inline-flex w-auto md:grid md:w-full md:max-w-7xl md:grid-cols-12 h-11 md:h-12 min-w-max md:min-w-0">
+                <TabsTrigger value="generator" className="flex items-center gap-1.5 px-3 md:px-4 text-xs md:text-sm">
+                  <Video className="h-3.5 w-3.5 md:h-4 md:w-4 flex-shrink-0" />
+                  <span>Create</span>
                 </TabsTrigger>
-                <TabsTrigger value="templates" className="flex items-center gap-2">
-                  <Sparkles className="h-4 w-4" />
-                  <span className="hidden sm:inline">Templates</span>
+                <TabsTrigger value="templates" className="flex items-center gap-1.5 px-3 md:px-4 text-xs md:text-sm">
+                  <Sparkles className="h-3.5 w-3.5 md:h-4 md:w-4 flex-shrink-0" />
+                  <span>Templates</span>
                 </TabsTrigger>
-                <TabsTrigger value="dashboard" className="flex items-center gap-2">
-                  <Layout className="h-4 w-4" />
-                  <span className="hidden sm:inline">Dashboard</span>
+                <TabsTrigger value="dashboard" className="flex items-center gap-1.5 px-3 md:px-4 text-xs md:text-sm">
+                  <Layout className="h-3.5 w-3.5 md:h-4 md:w-4 flex-shrink-0" />
+                  <span>Dashboard</span>
                 </TabsTrigger>
-                <TabsTrigger value="team" className="flex items-center gap-2">
-                  <Users className="h-4 w-4" />
-                  <span className="hidden sm:inline">Team</span>
+                <TabsTrigger value="team" className="flex items-center gap-1.5 px-3 md:px-4 text-xs md:text-sm">
+                  <Users className="h-3.5 w-3.5 md:h-4 md:w-4 flex-shrink-0" />
+                  <span>Team</span>
                 </TabsTrigger>
-                <TabsTrigger value="analytics" className="flex items-center gap-2">
-                  <BarChart3 className="h-4 w-4" />
-                  <span className="hidden sm:inline">Analytics</span>
+                <TabsTrigger value="analytics" className="flex items-center gap-1.5 px-3 md:px-4 text-xs md:text-sm">
+                  <BarChart3 className="h-3.5 w-3.5 md:h-4 md:w-4 flex-shrink-0" />
+                  <span>Analytics</span>
                 </TabsTrigger>
-                <TabsTrigger value="insights" className="flex items-center gap-2">
-                  <Brain className="h-4 w-4" />
+                <TabsTrigger value="insights" className="flex items-center gap-1.5 px-3 md:px-4 text-xs md:text-sm">
+                  <Brain className="h-3.5 w-3.5 md:h-4 md:w-4 flex-shrink-0" />
                   <span className="hidden sm:inline">AI Insights</span>
+                  <span className="sm:hidden">Insights</span>
                 </TabsTrigger>
-                <TabsTrigger value="scheduler" className="flex items-center gap-2">
-                  <Calendar className="h-4 w-4" />
+                <TabsTrigger value="scheduler" className="flex items-center gap-1.5 px-3 md:px-4 text-xs md:text-sm">
+                  <Calendar className="h-3.5 w-3.5 md:h-4 md:w-4 flex-shrink-0" />
                   <span className="hidden sm:inline">Scheduler</span>
+                  <span className="sm:hidden">Schedule</span>
                 </TabsTrigger>
-                <TabsTrigger value="script" className="flex items-center gap-2">
-                  <FileText className="h-4 w-4" />
+                <TabsTrigger value="script" className="flex items-center gap-1.5 px-3 md:px-4 text-xs md:text-sm">
+                  <FileText className="h-3.5 w-3.5 md:h-4 md:w-4 flex-shrink-0" />
                   <span className="hidden sm:inline">AI Scripts</span>
+                  <span className="sm:hidden">Scripts</span>
                 </TabsTrigger>
-                <TabsTrigger value="brand" className="flex items-center gap-2">
-                  <Palette className="h-4 w-4" />
+                <TabsTrigger value="brand" className="flex items-center gap-1.5 px-3 md:px-4 text-xs md:text-sm">
+                  <Palette className="h-3.5 w-3.5 md:h-4 md:w-4 flex-shrink-0" />
                   <span className="hidden sm:inline">Brand Kit</span>
+                  <span className="sm:hidden">Brand</span>
                 </TabsTrigger>
-                <TabsTrigger value="social" className="flex items-center gap-2">
-                  <Share2 className="h-4 w-4" />
-                  <span className="hidden sm:inline">Social</span>
+                <TabsTrigger value="social" className="flex items-center gap-1.5 px-3 md:px-4 text-xs md:text-sm">
+                  <Share2 className="h-3.5 w-3.5 md:h-4 md:w-4 flex-shrink-0" />
+                  <span>Social</span>
                 </TabsTrigger>
-                <TabsTrigger value="library" className="flex items-center gap-2">
-                  <FolderOpen className="h-4 w-4" />
-                  <span className="hidden sm:inline">Library</span>
+                <TabsTrigger value="library" className="flex items-center gap-1.5 px-3 md:px-4 text-xs md:text-sm">
+                  <FolderOpen className="h-3.5 w-3.5 md:h-4 md:w-4 flex-shrink-0" />
+                  <span>Library</span>
                 </TabsTrigger>
-                <TabsTrigger value="settings" className="flex items-center gap-2">
-                  <Settings className="h-4 w-4" />
-                  <span className="hidden sm:inline">Settings</span>
+                <TabsTrigger value="settings" className="flex items-center gap-1.5 px-3 md:px-4 text-xs md:text-sm">
+                  <Settings className="h-3.5 w-3.5 md:h-4 md:w-4 flex-shrink-0" />
+                  <span>Settings</span>
                 </TabsTrigger>
               </TabsList>
             </div>
