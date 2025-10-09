@@ -90,42 +90,75 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-    
-    if (error) {
-      toast.error(error.message);
-    } else {
-      toast.success('Welcome back!');
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+      
+      if (error) {
+        // Handle specific error cases
+        if (error.message.includes('Invalid login credentials')) {
+          toast.error('البريد الإلكتروني أو كلمة المرور غير صحيحة');
+        } else if (error.message.includes('Email not confirmed')) {
+          toast.error('يرجى تأكيد بريدك الإلكتروني أولاً');
+        } else {
+          toast.error(error.message);
+        }
+        return { error };
+      }
+      
+      if (data.user) {
+        toast.success('مرحباً بك!');
+      }
+      
+      return { error: null };
+    } catch (error: any) {
+      toast.error('حدث خطأ أثناء تسجيل الدخول');
+      return { error };
     }
-    
-    return { error };
   };
 
   const signUp = async (email: string, password: string, username?: string) => {
-    const redirectUrl = `${window.location.origin}/`;
-    
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: redirectUrl,
-        data: {
-          username: username || email.split('@')[0],
-          display_name: username || email.split('@')[0]
+    try {
+      const redirectUrl = `${window.location.origin}/onboarding`;
+      
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: redirectUrl,
+          data: {
+            username: username || email.split('@')[0],
+            display_name: username || email.split('@')[0]
+          }
         }
+      });
+      
+      if (error) {
+        if (error.message.includes('already registered')) {
+          toast.error('هذا البريد الإلكتروني مسجل بالفعل');
+        } else {
+          toast.error(error.message);
+        }
+        return { error };
       }
-    });
-    
-    if (error) {
-      toast.error(error.message);
-    } else {
-      toast.success('Check your email to confirm your account!');
+      
+      // Check if email confirmation is required
+      if (data.user && !data.session) {
+        toast.success('تم إنشاء حسابك! يرجى التحقق من بريدك الإلكتروني لتأكيد الحساب', {
+          duration: 6000
+        });
+      } else if (data.session) {
+        // Auto-login if email confirmation is disabled
+        toast.success('تم إنشاء حسابك بنجاح!');
+      }
+      
+      return { error: null };
+    } catch (error: any) {
+      toast.error('حدث خطأ أثناء إنشاء الحساب');
+      return { error };
     }
-    
-    return { error };
   };
 
   const signOut = async () => {

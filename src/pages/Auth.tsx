@@ -33,7 +33,13 @@ export default function Auth() {
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
     
-    await signIn(email, password);
+    const { error } = await signIn(email, password);
+    
+    if (!error) {
+      // Successful login - user will be redirected automatically
+      console.log('Login successful');
+    }
+    
     setIsLoading(false);
   };
 
@@ -46,11 +52,13 @@ export default function Auth() {
     const password = formData.get('password') as string;
     const username = formData.get('username') as string;
     
+    if (password.length < 6) {
+      setIsLoading(false);
+      return;
+    }
+    
     const { error } = await signUp(email, password, username);
     setIsLoading(false);
-    
-    // Don't set loading to false if there's no error and email confirmation is needed
-    // The user will be redirected automatically after confirming their email
   };
 
   return (
