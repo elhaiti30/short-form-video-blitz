@@ -3,8 +3,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 import { useAuth } from "@/hooks/useAuth";
-import { Sparkles, Menu, Video, LogOut, User, Settings, CreditCard } from "lucide-react";
+import { Sparkles, Video, LogOut, User, Settings, CreditCard } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
 const Header = () => {
@@ -17,10 +18,12 @@ const Header = () => {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 glass-effect border-b border-border/40">
-      <div className="container flex h-14 sm:h-16 max-w-screen-2xl items-center px-3 sm:px-4">
-        <div className="mr-2 sm:mr-4 flex flex-1 sm:flex-initial">
-          <Link className="flex items-center space-x-2 sm:space-x-3 sm:mr-6" to={user ? "/dashboard" : "/"}>
+    <header className="sticky top-0 z-40 w-full glass-effect border-b border-border/40">
+      <div className="flex h-14 sm:h-16 items-center px-4 gap-2">
+        <SidebarTrigger className="lg:hidden" />
+        
+        <div className="flex-1">
+          <Link className="flex items-center space-x-2 sm:space-x-3" to={user ? "/dashboard" : "/"}>
             <div className="p-1.5 sm:p-2 rounded-lg sm:rounded-xl bg-gradient-primary animate-pulse-glow">
               <Video className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
             </div>
@@ -28,9 +31,6 @@ const Header = () => {
               <span className="font-bold text-base sm:text-xl text-gradient">
                 VideoBlitz AI
               </span>
-              <p className="text-[10px] sm:text-xs text-muted-foreground hidden xs:block">
-                Turn ideas into viral videos
-              </p>
             </div>
           </Link>
         </div>
