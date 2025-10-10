@@ -13,18 +13,18 @@ import {
 } from "@/components/ui/sidebar";
 
 const mainItems = [
-  { title: "إنشاء", value: "generator", icon: Video },
-  { title: "القوالب", value: "templates", icon: Sparkles },
-  { title: "لوحة التحكم", value: "dashboard", icon: Layout },
-  { title: "الفريق", value: "team", icon: Users },
-  { title: "التحليلات", value: "analytics", icon: BarChart3 },
-  { title: "رؤى AI", value: "insights", icon: Brain },
-  { title: "الجدولة", value: "scheduler", icon: Calendar },
-  { title: "النصوص", value: "script", icon: FileText },
-  { title: "العلامة", value: "brand", icon: Palette },
-  { title: "المنصات", value: "social", icon: Share2 },
-  { title: "المكتبة", value: "library", icon: FolderOpen },
-  { title: "الإعدادات", value: "settings", icon: Settings },
+  { title: "Create", value: "generator", icon: Video },
+  { title: "Templates", value: "templates", icon: Sparkles },
+  { title: "Dashboard", value: "dashboard", icon: Layout },
+  { title: "Team", value: "team", icon: Users },
+  { title: "Analytics", value: "analytics", icon: BarChart3 },
+  { title: "AI Insights", value: "insights", icon: Brain },
+  { title: "Scheduler", value: "scheduler", icon: Calendar },
+  { title: "Scripts", value: "script", icon: FileText },
+  { title: "Brand Kit", value: "brand", icon: Palette },
+  { title: "Social", value: "social", icon: Share2 },
+  { title: "Library", value: "library", icon: FolderOpen },
+  { title: "Settings", value: "settings", icon: Settings },
 ];
 
 interface AppSidebarProps {
@@ -38,7 +38,7 @@ export function AppSidebar({ activeSection, onSectionChange }: AppSidebarProps) 
   const isActive = (value: string) => activeSection === value;
 
   return (
-    <Sidebar collapsible="icon" className="border-r border-border/40">
+    <Sidebar collapsible="icon" className="fixed left-0 top-0 h-screen border-r border-border/40">
       <SidebarContent className="pt-16">
         <SidebarGroup>
           <SidebarGroupContent>
