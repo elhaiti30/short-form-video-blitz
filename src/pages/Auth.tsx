@@ -14,7 +14,7 @@ export default function Auth() {
 
   // Redirect if already authenticated
   if (user && !loading) {
-    return <Navigate to="/onboarding" replace />;
+    return <Navigate to="/dashboard" replace />;
   }
 
   if (loading) {
@@ -34,13 +34,12 @@ export default function Auth() {
     const password = formData.get('password') as string;
     
     const { error } = await signIn(email, password);
+    setIsLoading(false);
     
     if (!error) {
-      // Successful login - user will be redirected automatically
-      console.log('Login successful');
+      // Successful login - redirect will happen automatically via onAuthStateChange
+      console.log('Login successful, redirecting...');
     }
-    
-    setIsLoading(false);
   };
 
   const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {

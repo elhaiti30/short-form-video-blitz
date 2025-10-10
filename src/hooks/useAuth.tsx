@@ -121,7 +121,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const signUp = async (email: string, password: string, username?: string) => {
     try {
-      const redirectUrl = `${window.location.origin}/onboarding`;
+      const redirectUrl = `${window.location.origin}/dashboard`;
       
       const { data, error } = await supabase.auth.signUp({
         email,
@@ -136,8 +136,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       });
       
       if (error) {
-        if (error.message.includes('already registered')) {
-          toast.error('هذا البريد الإلكتروني مسجل بالفعل');
+        if (error.message.includes('already registered') || error.message.includes('User already registered')) {
+          toast.error('هذا البريد الإلكتروني مسجل بالفعل. حاول تسجيل الدخول.');
         } else {
           toast.error(error.message);
         }
@@ -146,16 +146,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       
       // Check if email confirmation is required
       if (data.user && !data.session) {
-        toast.success('تم إنشاء حسابك! يرجى التحقق من بريدك الإلكتروني لتأكيد الحساب', {
-          duration: 6000
+        toast.success('تم إنشاء حسابك! يرجى التحقق من بريدك الإلكتروني لتأكيد الحساب.', {
+          duration: 8000
         });
       } else if (data.session) {
         // Auto-login if email confirmation is disabled
-        toast.success('تم إنشاء حسابك بنجاح!');
+        toast.success('تم إنشاء حسابك بنجاح! مرحباً بك!');
+        // Session will be handled by onAuthStateChange
       }
       
       return { error: null };
     } catch (error: any) {
+      console.error('Sign up error:', error);
       toast.error('حدث خطأ أثناء إنشاء الحساب');
       return { error };
     }
