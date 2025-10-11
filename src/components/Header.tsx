@@ -18,7 +18,7 @@ const Header = () => {
   };
 
   return (
-    <header className="sticky top-0 z-40 w-full glass-effect border-b border-border/40">
+    <header className="sticky top-0 z-50 w-full glass-effect border-b border-border/40 flex-shrink-0">
       <div className="flex h-14 sm:h-16 items-center px-4 gap-2">
         <SidebarTrigger className="lg:hidden" />
         
