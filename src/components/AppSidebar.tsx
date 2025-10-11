@@ -67,7 +67,7 @@ export function AppSidebar({ activeSection, onSectionChange }: AppSidebarProps) 
                     onClick={() => onSectionChange(item.value)}
                     isActive={isActive(item.value)}
                     tooltip={item.title}
-                    className="h-9 px-3"
+                    className="h-9 px-2"
                   >
                     <item.icon className="h-4 w-4 flex-shrink-0" />
                     <span className="text-sm">{item.title}</span>
@@ -79,13 +79,13 @@ export function AppSidebar({ activeSection, onSectionChange }: AppSidebarProps) 
         </SidebarGroup>
       </SidebarContent>
       
-      <SidebarFooter className="p-2 border-t border-border/40">
+      <SidebarFooter className="pt-2 px-2 pb-4 border-t border-border/40">
         <SidebarMenu className="gap-1">
           <SidebarMenuItem>
             <SidebarMenuButton
               onClick={handleUpgrade}
               tooltip="Upgrade"
-              className="h-9 px-3 hover:bg-primary/10"
+              className="h-9 px-2 hover:bg-primary/10"
             >
               <Crown className="h-4 w-4 flex-shrink-0 text-primary" />
               <span className="text-sm font-medium">Upgrade</span>
@@ -95,7 +95,7 @@ export function AppSidebar({ activeSection, onSectionChange }: AppSidebarProps) 
             <SidebarMenuButton
               onClick={handleLogout}
               tooltip="Log out"
-              className="h-9 px-3 hover:bg-destructive/10"
+              className="h-9 px-2 hover:bg-destructive/10"
             >
               <LogOut className="h-4 w-4 flex-shrink-0 text-destructive" />
               <span className="text-sm">Log out</span>
