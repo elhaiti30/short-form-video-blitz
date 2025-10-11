@@ -68,8 +68,6 @@ const Index = () => {
         <SidebarInset className="flex-1">
           <Header />
           
-          {activeSection === "generator" && <Hero />}
-          
           <main className="flex-1">
             <div className="py-8 md:py-16 bg-card/20">
               <div className="container mx-auto px-4">
