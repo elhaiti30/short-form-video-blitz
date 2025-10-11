@@ -38,7 +38,7 @@ export function AppSidebar({ activeSection, onSectionChange }: AppSidebarProps) 
   const isActive = (value: string) => activeSection === value;
 
   return (
-    <Sidebar collapsible="icon" className="fixed left-0 top-0 h-screen border-r border-border/40">
+    <Sidebar collapsible="icon" className="border-r border-border/40">
       <SidebarContent className="pt-16">
         <SidebarGroup>
           <SidebarGroupContent>
