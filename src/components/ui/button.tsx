@@ -22,10 +22,10 @@ const buttonVariants = cva(
         glass: "glass-effect border border-primary/30 hover:border-primary/50 glow-on-hover",
       },
       size: {
-        default: "h-10 px-4 py-2",
-        sm: "h-9 rounded-md px-3",
-        lg: "h-11 rounded-md px-8",
-        icon: "h-10 w-10",
+        default: "h-10 px-4 py-2 md:h-10 md:px-4 md:py-2 min-h-[44px] min-w-[44px]",
+        sm: "h-9 rounded-md px-3 md:h-9 md:px-3 min-h-[40px]",
+        lg: "h-11 rounded-md px-8 md:h-11 md:px-8 min-h-[48px]",
+        icon: "h-10 w-10 md:h-10 md:w-10 min-h-[44px] min-w-[44px]",
       },
     },
     defaultVariants: {

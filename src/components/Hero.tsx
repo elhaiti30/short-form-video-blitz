@@ -35,6 +35,7 @@ const Hero = () => {
           src={heroImage} 
           alt="AI Video Studio" 
           className="w-full h-full object-cover"
+          loading="lazy"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
       </div>

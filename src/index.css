@@ -18,7 +18,7 @@
     --secondary: 240 5% 16%;
     --secondary-foreground: 240 5% 96%;
     --muted: 240 5% 16%;
-    --muted-foreground: 240 5% 64%;
+    --muted-foreground: 240 5% 72%;
     --accent: 255 70% 62%;
     --accent-foreground: 240 8% 6%;
     --destructive: 0 62.8% 30.6%;
@@ -54,7 +54,8 @@
     --shadow-premium: 0 20px 40px -10px hsl(255, 70%, 62% / 0.2);
     --shadow-glow: 0 0 40px hsl(255, 70%, 62% / 0.3);
     --shadow-glow-strong: 0 0 60px hsl(255, 70%, 62% / 0.5);
-    --shadow-card: 0 10px 30px -5px hsl(240, 8%, 4% / 0.3);
+    --shadow-card: 0 10px 30px -5px hsl(240, 8%, 4% / 0.4);
+    --shadow-card-hover: 0 20px 50px -10px hsl(240, 8%, 4% / 0.6);
   }
 }
 
@@ -142,6 +143,24 @@
   
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
+  }
+
+  /* Responsive card grid utilities */
+  .card-grid {
+    @apply grid gap-4 md:gap-6;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+
+  @media (min-width: 768px) and (max-width: 1199px) {
+    .card-grid {
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    }
+  }
+
+  @media (min-width: 1200px) {
+    .card-grid {
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    }
   }
 }
 
