@@ -18,17 +18,17 @@ const Header = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-card border-b-2 border-primary/30 flex-shrink-0 shadow-lg">
+    <header className="sticky top-0 z-[100] w-full bg-[#1a1a2e] border-b-2 border-[#ff6b9d] flex-shrink-0 shadow-[0_4px_20px_rgba(255,107,157,0.3)]">
       <div className="flex h-14 sm:h-16 items-center px-4 gap-2">
-        <SidebarTrigger className="lg:hidden text-foreground hover:text-primary" />
+        <SidebarTrigger className="lg:hidden text-white hover:text-[#ff6b9d] min-w-[44px] min-h-[44px] flex items-center justify-center" />
         
         <div className="flex-1">
           <Link className="flex items-center space-x-2 sm:space-x-3" to={user ? "/dashboard" : "/"}>
-            <div className="p-1.5 sm:p-2 rounded-lg sm:rounded-xl bg-primary">
-              <Video className="h-4 w-4 sm:h-5 sm:w-5 text-primary-foreground" />
+            <div className="p-1.5 sm:p-2 rounded-lg sm:rounded-xl bg-[#ff6b9d]">
+              <Video className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
             </div>
             <div className="block">
-              <span className="font-bold text-base sm:text-xl bg-gradient-to-r from-primary to-primary-glow bg-clip-text text-transparent">
+              <span className="font-bold text-base sm:text-xl text-white">
                 VideoBlitz AI
               </span>
             </div>
@@ -37,12 +37,12 @@ const Header = () => {
         
         <div className="flex items-center justify-end space-x-1 sm:space-x-2">
           <nav className="flex items-center space-x-1 sm:space-x-2">
-            <Button variant="ghost" className="hidden lg:inline-flex text-sm px-3 text-foreground hover:text-primary">
+            <Button variant="ghost" className="hidden lg:inline-flex text-sm px-3 text-white hover:text-[#ff6b9d] hover:bg-[#ff6b9d]/10">
               Features
             </Button>
             <Button 
               variant="ghost" 
-              className="hidden lg:inline-flex text-sm px-3 text-foreground hover:text-primary"
+              className="hidden lg:inline-flex text-sm px-3 text-white hover:text-[#ff6b9d] hover:bg-[#ff6b9d]/10"
               onClick={() => navigate('/pricing')}
             >
               Pricing
@@ -51,10 +51,10 @@ const Header = () => {
             {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="relative h-8 w-8 sm:h-9 sm:w-9 rounded-full p-0 hover:bg-accent">
-                    <Avatar className="h-8 w-8 sm:h-9 sm:w-9 border-2 border-primary/20">
-                      <AvatarFallback className="text-xs sm:text-sm bg-primary/10 text-primary font-semibold">
-                        {profile?.username?.charAt(0) || user.email?.charAt(0).toUpperCase()}
+                  <Button variant="ghost" className="relative h-9 w-9 sm:h-10 sm:w-10 rounded-full p-0 hover:bg-[#ff6b9d]/20 min-w-[44px] min-h-[44px]">
+                    <Avatar className="h-9 w-9 sm:h-10 sm:w-10 border-2 border-[#ff6b9d]">
+                      <AvatarFallback className="text-sm bg-[#ff6b9d] text-white font-bold">
+                        {profile?.username?.charAt(0).toUpperCase() || user.email?.charAt(0).toUpperCase()}
                       </AvatarFallback>
                     </Avatar>
                   </Button>

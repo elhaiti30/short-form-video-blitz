@@ -56,8 +56,8 @@ export function AppSidebar({ activeSection, onSectionChange }: AppSidebarProps) 
   };
 
   return (
-    <Sidebar collapsible="icon" className="border-r-2 border-primary/30 w-[70px] bg-card">
-      <SidebarContent className="pt-16 flex flex-col justify-between h-full bg-card">
+    <Sidebar collapsible="icon" className="border-r-2 border-[#ff6b9d] w-[70px] bg-[#1a1a2e]">
+      <SidebarContent className="pt-16 flex flex-col justify-between h-full bg-[#1a1a2e]">
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu className="gap-2">
@@ -67,7 +67,7 @@ export function AppSidebar({ activeSection, onSectionChange }: AppSidebarProps) 
                     onClick={() => onSectionChange(item.value)}
                     isActive={isActive(item.value)}
                     tooltip={item.title}
-                    className="h-11 w-11 p-0 flex items-center justify-center mx-auto hover:bg-primary/20 data-[active=true]:bg-primary data-[active=true]:text-primary-foreground"
+                    className="h-11 w-11 p-0 flex items-center justify-center mx-auto hover:bg-[#ff6b9d]/20 data-[active=true]:bg-[#ff6b9d] data-[active=true]:text-white text-white/70 hover:text-white transition-all rounded-lg"
                   >
                     <item.icon className="h-5 w-5" />
                   </SidebarMenuButton>
@@ -77,24 +77,24 @@ export function AppSidebar({ activeSection, onSectionChange }: AppSidebarProps) 
           </SidebarGroupContent>
         </SidebarGroup>
         
-        <SidebarFooter className="pb-6 border-t-2 border-primary/30 pt-3 bg-card">
+        <SidebarFooter className="pb-6 border-t-2 border-[#ff6b9d] pt-3 bg-[#1a1a2e]">
           <SidebarMenu className="gap-2">
             <SidebarMenuItem>
               <SidebarMenuButton
                 onClick={handleUpgrade}
                 tooltip="Upgrade"
-                className="h-11 w-11 p-0 flex items-center justify-center mx-auto hover:bg-primary/20 bg-primary/10 rounded-lg"
+                className="h-11 w-11 p-0 flex items-center justify-center mx-auto hover:bg-[#ff6b9d]/30 bg-[#ff6b9d]/20 rounded-lg"
               >
-                <Crown className="h-5 w-5 text-primary" />
+                <Crown className="h-5 w-5 text-[#ff6b9d]" />
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
               <SidebarMenuButton
                 onClick={handleLogout}
                 tooltip="Log out"
-                className="h-11 w-11 p-0 flex items-center justify-center mx-auto hover:bg-destructive/20 bg-destructive/10 rounded-lg"
+                className="h-11 w-11 p-0 flex items-center justify-center mx-auto hover:bg-red-500/30 bg-red-500/20 rounded-lg"
               >
-                <LogOut className="h-5 w-5 text-destructive" />
+                <LogOut className="h-5 w-5 text-red-500" />
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>
