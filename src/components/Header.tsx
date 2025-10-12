@@ -18,9 +18,9 @@ const Header = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-background/95 backdrop-blur-md border-b border-border flex-shrink-0">
+    <header className="sticky top-0 z-50 w-full bg-card border-b-2 border-primary/30 flex-shrink-0 shadow-lg">
       <div className="flex h-14 sm:h-16 items-center px-4 gap-2">
-        <SidebarTrigger className="lg:hidden text-foreground" />
+        <SidebarTrigger className="lg:hidden text-foreground hover:text-primary" />
         
         <div className="flex-1">
           <Link className="flex items-center space-x-2 sm:space-x-3" to={user ? "/dashboard" : "/"}>
