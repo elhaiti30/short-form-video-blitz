@@ -56,8 +56,8 @@ export function AppSidebar({ activeSection, onSectionChange }: AppSidebarProps) 
   };
 
   return (
-    <Sidebar collapsible="icon" className="border-r border-border/40 w-[70px]">
-      <SidebarContent className="pt-16 flex flex-col justify-between h-full">
+    <Sidebar collapsible="icon" className="border-r border-border/40 w-[70px] hidden lg:flex">
+      <SidebarContent className="pt-16 flex flex-col justify-between h-full bg-sidebar">
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu className="gap-2">

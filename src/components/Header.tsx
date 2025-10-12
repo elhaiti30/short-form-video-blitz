@@ -18,17 +18,17 @@ const Header = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full glass-effect border-b border-border/40 flex-shrink-0">
+    <header className="sticky top-0 z-50 w-full bg-background/95 backdrop-blur-md border-b border-border flex-shrink-0">
       <div className="flex h-14 sm:h-16 items-center px-4 gap-2">
-        <SidebarTrigger className="lg:hidden" />
+        <SidebarTrigger className="lg:hidden text-foreground" />
         
         <div className="flex-1">
           <Link className="flex items-center space-x-2 sm:space-x-3" to={user ? "/dashboard" : "/"}>
-            <div className="p-1.5 sm:p-2 rounded-lg sm:rounded-xl bg-gradient-primary animate-pulse-glow">
-              <Video className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
+            <div className="p-1.5 sm:p-2 rounded-lg sm:rounded-xl bg-primary">
+              <Video className="h-4 w-4 sm:h-5 sm:w-5 text-primary-foreground" />
             </div>
             <div className="block">
-              <span className="font-bold text-base sm:text-xl text-gradient">
+              <span className="font-bold text-base sm:text-xl bg-gradient-to-r from-primary to-primary-glow bg-clip-text text-transparent">
                 VideoBlitz AI
               </span>
             </div>
@@ -37,12 +37,12 @@ const Header = () => {
         
         <div className="flex items-center justify-end space-x-1 sm:space-x-2">
           <nav className="flex items-center space-x-1 sm:space-x-2">
-            <Button variant="ghost" className="hidden lg:inline-flex text-sm px-3">
+            <Button variant="ghost" className="hidden lg:inline-flex text-sm px-3 text-foreground hover:text-primary">
               Features
             </Button>
             <Button 
               variant="ghost" 
-              className="hidden lg:inline-flex text-sm px-3"
+              className="hidden lg:inline-flex text-sm px-3 text-foreground hover:text-primary"
               onClick={() => navigate('/pricing')}
             >
               Pricing
@@ -51,9 +51,9 @@ const Header = () => {
             {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="relative h-8 w-8 sm:h-9 sm:w-9 rounded-full p-0">
-                    <Avatar className="h-8 w-8 sm:h-9 sm:w-9">
-                      <AvatarFallback className="text-xs sm:text-sm">
+                  <Button variant="ghost" className="relative h-8 w-8 sm:h-9 sm:w-9 rounded-full p-0 hover:bg-accent">
+                    <Avatar className="h-8 w-8 sm:h-9 sm:w-9 border-2 border-primary/20">
+                      <AvatarFallback className="text-xs sm:text-sm bg-primary/10 text-primary font-semibold">
                         {profile?.username?.charAt(0) || user.email?.charAt(0).toUpperCase()}
                       </AvatarFallback>
                     </Avatar>
