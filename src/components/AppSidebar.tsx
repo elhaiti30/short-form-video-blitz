@@ -2,6 +2,7 @@ import { Video, Layout, Users, BarChart3, Brain, Calendar, FileText, Palette, Sh
 import { NavLink, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { toast } from "sonner";
 import {
   Sidebar,
@@ -78,26 +79,29 @@ export function AppSidebar({ activeSection, onSectionChange }: AppSidebarProps) 
           </SidebarGroupContent>
         </SidebarGroup>
         
-        <SidebarFooter className="pb-6 border-t border-border pt-3">
-          <SidebarMenu className="gap-1">
+        <SidebarFooter className="pb-4 border-t border-border pt-3 space-y-2">
+          <div className="px-2">
+            <ThemeToggle />
+          </div>
+          <SidebarMenu className="gap-2">
             <SidebarMenuItem>
               <SidebarMenuButton
                 onClick={handleUpgrade}
                 tooltip={open ? undefined : "Upgrade"}
-                className="hover:bg-accent"
+                className="hover:bg-accent py-6"
               >
                 <Crown className="h-5 w-5 text-yellow-500" />
-                <span>Upgrade</span>
+                <span className="font-medium">Upgrade to Pro</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
               <SidebarMenuButton
                 onClick={handleLogout}
                 tooltip={open ? undefined : "Log out"}
-                className="hover:bg-destructive/10 text-destructive hover:text-destructive"
+                className="hover:bg-destructive/10 text-destructive hover:text-destructive py-6"
               >
                 <LogOut className="h-5 w-5" />
-                <span>Log out</span>
+                <span className="font-medium">Log out</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>

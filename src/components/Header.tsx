@@ -48,7 +48,7 @@ const Header = () => {
               Pricing
             </Button>
             
-            {user ? (
+            {user && (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="relative h-9 w-9 sm:h-10 sm:w-10 rounded-full p-0 hover:bg-accent min-w-[44px] min-h-[44px]">
@@ -79,15 +79,6 @@ const Header = () => {
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
-            ) : (
-              <Button 
-                className="premium-button text-xs sm:text-sm font-medium px-3 sm:px-4 h-9 sm:h-10"
-                onClick={() => navigate('/auth')}
-              >
-                <Sparkles className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
-                <span className="hidden xs:inline">Get Started</span>
-                <span className="xs:hidden">Start</span>
-              </Button>
             )}
           </nav>
         </div>
