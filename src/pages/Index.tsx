@@ -62,34 +62,36 @@ const Index = () => {
 
   return (
     <SidebarProvider>
-      <div className="min-h-screen w-full flex bg-background">
-        <AppSidebar activeSection={activeSection} onSectionChange={setActiveSection} />
+      <div className="min-h-screen w-full flex flex-col bg-background">
+        <Header />
         
-        <SidebarInset className="flex-1 flex flex-col w-full">
-          <Header />
+        <div className="flex flex-1 w-full">
+          <AppSidebar activeSection={activeSection} onSectionChange={setActiveSection} />
           
-          <main className="flex-1">
-            <div className="py-8 md:py-16 bg-card/20">
-              <div className="container mx-auto px-4">
-                {renderContent()}
+          <SidebarInset className="flex-1 flex flex-col w-full">
+            <main className="flex-1">
+              <div className="py-8 md:py-16 bg-card/20">
+                <div className="container mx-auto px-4">
+                  {renderContent()}
+                </div>
               </div>
-            </div>
 
-            {activeSection === "generator" && (
-              <>
-                <div className="py-16">
-                  <PlatformFeatures />
-                </div>
+              {activeSection === "generator" && (
+                <>
+                  <div className="py-16">
+                    <PlatformFeatures />
+                  </div>
 
-                <div className="py-16 bg-card/20">
-                  <PricingSection />
-                </div>
-              </>
-            )}
-          </main>
-          
-          <Footer />
-        </SidebarInset>
+                  <div className="py-16 bg-card/20">
+                    <PricingSection />
+                  </div>
+                </>
+              )}
+            </main>
+            
+            <Footer />
+          </SidebarInset>
+        </div>
         
         <AIAssistant />
       </div>

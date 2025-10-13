@@ -18,7 +18,7 @@ const Header = () => {
   };
 
   return (
-    <header className="sticky top-0 z-[100] w-full bg-card border-b border-border flex-shrink-0 shadow-lg backdrop-blur-sm">
+    <header className="w-full z-[100] bg-card border-b border-border flex-shrink-0 shadow-lg backdrop-blur-sm">
       <div className="flex h-14 sm:h-16 items-center px-4 gap-2">
         <SidebarTrigger className="lg:hidden min-w-[44px] min-h-[44px] flex items-center justify-center" />
         
