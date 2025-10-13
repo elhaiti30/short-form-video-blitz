@@ -56,20 +56,21 @@ export function AppSidebar({ activeSection, onSectionChange }: AppSidebarProps) 
   };
 
   return (
-    <Sidebar collapsible="icon" className="border-r-2 border-[#ff6b9d] w-[70px] bg-[#1a1a2e]">
-      <SidebarContent className="pt-16 flex flex-col justify-between h-full bg-[#1a1a2e]">
+    <Sidebar collapsible="icon" className="border-r border-border bg-sidebar">
+      <SidebarContent className="pt-16 flex flex-col justify-between h-full">
         <SidebarGroup>
           <SidebarGroupContent>
-            <SidebarMenu className="gap-2">
+            <SidebarMenu className="gap-1">
               {mainItems.map((item) => (
                 <SidebarMenuItem key={item.value}>
                   <SidebarMenuButton
                     onClick={() => onSectionChange(item.value)}
                     isActive={isActive(item.value)}
-                    tooltip={item.title}
-                    className="h-11 w-11 p-0 flex items-center justify-center mx-auto hover:bg-[#ff6b9d]/20 data-[active=true]:bg-[#ff6b9d] data-[active=true]:text-white text-white/70 hover:text-white transition-all rounded-lg"
+                    tooltip={open ? undefined : item.title}
+                    className="hover:bg-accent data-[active=true]:bg-primary data-[active=true]:text-primary-foreground transition-all"
                   >
                     <item.icon className="h-5 w-5" />
+                    <span>{item.title}</span>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -77,24 +78,26 @@ export function AppSidebar({ activeSection, onSectionChange }: AppSidebarProps) 
           </SidebarGroupContent>
         </SidebarGroup>
         
-        <SidebarFooter className="pb-6 border-t-2 border-[#ff6b9d] pt-3 bg-[#1a1a2e]">
-          <SidebarMenu className="gap-2">
+        <SidebarFooter className="pb-6 border-t border-border pt-3">
+          <SidebarMenu className="gap-1">
             <SidebarMenuItem>
               <SidebarMenuButton
                 onClick={handleUpgrade}
-                tooltip="Upgrade"
-                className="h-11 w-11 p-0 flex items-center justify-center mx-auto hover:bg-[#ff6b9d]/30 bg-[#ff6b9d]/20 rounded-lg"
+                tooltip={open ? undefined : "Upgrade"}
+                className="hover:bg-accent"
               >
-                <Crown className="h-5 w-5 text-[#ff6b9d]" />
+                <Crown className="h-5 w-5 text-yellow-500" />
+                <span>Upgrade</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
               <SidebarMenuButton
                 onClick={handleLogout}
-                tooltip="Log out"
-                className="h-11 w-11 p-0 flex items-center justify-center mx-auto hover:bg-red-500/30 bg-red-500/20 rounded-lg"
+                tooltip={open ? undefined : "Log out"}
+                className="hover:bg-destructive/10 text-destructive hover:text-destructive"
               >
-                <LogOut className="h-5 w-5 text-red-500" />
+                <LogOut className="h-5 w-5" />
+                <span>Log out</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>
