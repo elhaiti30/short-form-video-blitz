@@ -163,8 +163,8 @@ export const Dashboard = () => {
     const convertedProjects: VideoProject[] = projects.map(project => ({
       id: project.id,
       title: project.project_name,
-      description: project.script_content?.substring(0, 100) + "..." || "No description",
-      thumbnail: "/api/placeholder/300/200",
+    description: project.script_content?.substring(0, 100) + "..." || "No description",
+    thumbnail: "",
       duration: 30,
       views: Math.floor(Math.random() * 10000),
       likes: Math.floor(Math.random() * 1000),
@@ -199,7 +199,7 @@ export const Dashboard = () => {
     id: project.id,
     title: project.project_name,
     description: project.script_content?.substring(0, 100) + "..." || "No description",
-    thumbnail: "/api/placeholder/300/200",
+    thumbnail: "",
     duration: 30,
     views: Math.floor(Math.random() * 10000),
     likes: Math.floor(Math.random() * 1000),
@@ -268,7 +268,10 @@ export const Dashboard = () => {
         </div>
         <Button 
           className="premium-button"
-          onClick={() => window.location.href = "/#video-generator"}
+          onClick={() => {
+            const generatorTab = document.querySelector('[data-value="generator"]') as HTMLElement;
+            if (generatorTab) generatorTab.click();
+          }}
         >
           <Plus className="h-4 w-4 mr-2" />
           Create New Video

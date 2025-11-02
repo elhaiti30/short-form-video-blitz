@@ -266,8 +266,9 @@ export const TemplateLibrary = ({ onSelectTemplate }: TemplateLibraryProps) => {
         {sortedTemplates.map((template) => (
           <Card key={template.id} className="premium-card group cursor-pointer transition-all duration-300 hover:scale-105">
             <div className="relative">
-              <div className="aspect-video bg-gradient-to-br from-primary/20 to-secondary/20 rounded-t-lg flex items-center justify-center">
-                <Play className="h-12 w-12 text-primary/70" />
+              <div className="aspect-video bg-gradient-to-br from-primary/20 via-accent/10 to-secondary/20 rounded-t-lg flex flex-col items-center justify-center gap-2">
+                <Play className="h-12 w-12 text-primary animate-pulse" />
+                <span className="text-xs text-muted-foreground">{template.category}</span>
               </div>
               {('isPremium' in template ? template.isPremium : template.is_premium) && (
                 <Badge className="absolute top-2 right-2 premium-button">
