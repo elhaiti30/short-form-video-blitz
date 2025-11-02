@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ArrowRight, Sparkles, Video, Zap, BarChart3, Users, Cloud } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { ArrowRight, Sparkles, Video, Zap, BarChart3, Users, Cloud, PlayCircle } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 
 const Landing = () => {
@@ -13,6 +13,17 @@ const Landing = () => {
       navigate("/dashboard");
     } else {
       navigate("/auth");
+    }
+  };
+
+  const handleWatchDemo = () => {
+    window.open("https://www.youtube.com/watch?v=dQw4w9WgXcQ", "_blank");
+  };
+
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
     }
   };
 
@@ -39,6 +50,56 @@ const Landing = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-background/95 to-primary/5">
+      {/* Header */}
+      <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="container mx-auto max-w-6xl flex h-16 items-center justify-between px-4">
+          <Link to="/" className="flex items-center space-x-2">
+            <div className="p-2 rounded-xl bg-primary">
+              <Video className="h-5 w-5 text-primary-foreground" />
+            </div>
+            <span className="font-bold text-xl">VideoBlitz AI</span>
+          </Link>
+          
+          <nav className="hidden md:flex items-center space-x-6">
+            <button 
+              onClick={() => scrollToSection('features')} 
+              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Features
+            </button>
+            <button 
+              onClick={() => scrollToSection('how-it-works')} 
+              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+            >
+              How It Works
+            </button>
+            <Link 
+              to="/pricing" 
+              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Pricing
+            </Link>
+          </nav>
+          
+          <div className="flex items-center space-x-2">
+            {user ? (
+              <Button onClick={() => navigate("/dashboard")} variant="default">
+                Dashboard
+              </Button>
+            ) : (
+              <>
+                <Button onClick={() => navigate("/auth")} variant="ghost" className="hidden sm:inline-flex">
+                  Sign In
+                </Button>
+                <Button onClick={() => navigate("/auth")} variant="default">
+                  Get Started
+                </Button>
+              </>
+            )}
+          </div>
+        </div>
+      </header>
+
       {/* Hero Section */}
       <section className="relative overflow-hidden py-20 px-4">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-accent/10 animate-pulse" />
@@ -62,7 +123,8 @@ const Landing = () => {
                 Start Creating Free
                 <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
               </Button>
-              <Button size="lg" variant="outline" className="text-lg px-8 py-6">
+              <Button size="lg" variant="outline" className="text-lg px-8 py-6 group" onClick={handleWatchDemo}>
+                <PlayCircle className="mr-2 group-hover:scale-110 transition-transform" />
                 Watch Demo
               </Button>
             </div>
@@ -71,7 +133,7 @@ const Landing = () => {
       </section>
 
       {/* How It Works */}
-      <section className="py-20 px-4 bg-background/50">
+      <section id="how-it-works" className="py-20 px-4 bg-background/50">
         <div className="container mx-auto max-w-6xl">
           <h2 className="text-4xl font-bold text-center mb-12">How It Works</h2>
           
@@ -90,7 +152,7 @@ const Landing = () => {
       </section>
 
       {/* Key Features */}
-      <section className="py-20 px-4">
+      <section id="features" className="py-20 px-4">
         <div className="container mx-auto max-w-6xl">
           <h2 className="text-4xl font-bold text-center mb-12">Key Features</h2>
           
