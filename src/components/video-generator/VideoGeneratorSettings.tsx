@@ -2,7 +2,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 import { Badge } from "@/components/ui/badge";
-import { Clock, Smartphone, MonitorPlay } from "lucide-react";
+import { Clock } from "lucide-react";
+import { PLATFORMS, STYLES, LANGUAGES, VOICES, POV_STYLES, INDUSTRIES, TONES, QUALITY_OPTIONS } from "@/constants/videoOptions";
 
 interface VideoSettings {
   platform: string;
@@ -21,53 +22,6 @@ interface VideoGeneratorSettingsProps {
   onSettingsChange: (settings: VideoSettings) => void;
 }
 
-const platforms = [
-  { value: "tiktok", label: "TikTok", ratio: "9:16", icon: Smartphone },
-  { value: "instagram", label: "Instagram Reels", ratio: "9:16", icon: Smartphone },
-  { value: "youtube", label: "YouTube Shorts", ratio: "9:16", icon: MonitorPlay },
-];
-
-const styles = ["Cinematic", "Animated", "Realistic", "Artistic", "Documentary", "Fast-paced"];
-
-const languages = [
-  { value: "english", label: "English" },
-  { value: "spanish", label: "Spanish" },
-  { value: "french", label: "French" },
-  { value: "german", label: "German" },
-  { value: "arabic", label: "Arabic" }
-];
-
-const voices = [
-  { value: "alloy", label: "Alloy (Neutral)" },
-  { value: "echo", label: "Echo (Male)" },
-  { value: "fable", label: "Fable (British)" },
-  { value: "onyx", label: "Onyx (Deep)" },
-  { value: "nova", label: "Nova (Female)" },
-  { value: "shimmer", label: "Shimmer (Soft)" }
-];
-
-const povStyles = [
-  { value: "first-person", label: "First Person" },
-  { value: "third-person", label: "Third Person" },
-  { value: "narrator", label: "Narrator" }
-];
-
-const industries = [
-  { value: "general", label: "General" },
-  { value: "tech", label: "Technology" },
-  { value: "fitness", label: "Fitness" },
-  { value: "food", label: "Food & Cooking" },
-  { value: "fashion", label: "Fashion" },
-  { value: "education", label: "Education" }
-];
-
-const tones = [
-  { value: "engaging", label: "Engaging" },
-  { value: "professional", label: "Professional" },
-  { value: "casual", label: "Casual" },
-  { value: "humorous", label: "Humorous" },
-  { value: "dramatic", label: "Dramatic" }
-];
 
 export const VideoGeneratorSettings = ({ settings, onSettingsChange }: VideoGeneratorSettingsProps) => {
   const updateSetting = (key: keyof VideoSettings, value: any) => {
@@ -92,7 +46,7 @@ export const VideoGeneratorSettings = ({ settings, onSettingsChange }: VideoGene
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {platforms.map((platform) => {
+              {PLATFORMS.map((platform) => {
                 const Icon = platform.icon;
                 return (
                   <SelectItem key={platform.value} value={platform.value}>
@@ -137,9 +91,11 @@ export const VideoGeneratorSettings = ({ settings, onSettingsChange }: VideoGene
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="hd">HD (1080p)</SelectItem>
-              <SelectItem value="4k">4K Ultra HD</SelectItem>
-              <SelectItem value="standard">Standard (720p)</SelectItem>
+              {QUALITY_OPTIONS.map((quality) => (
+                <SelectItem key={quality.value} value={quality.value}>
+                  {quality.label}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
@@ -154,7 +110,7 @@ export const VideoGeneratorSettings = ({ settings, onSettingsChange }: VideoGene
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {styles.map((style) => (
+              {STYLES.map((style) => (
                 <SelectItem key={style.toLowerCase()} value={style.toLowerCase()}>
                   {style}
                 </SelectItem>
@@ -171,7 +127,7 @@ export const VideoGeneratorSettings = ({ settings, onSettingsChange }: VideoGene
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {industries.map((industry) => (
+              {INDUSTRIES.map((industry) => (
                 <SelectItem key={industry.value} value={industry.value}>
                   {industry.label}
                 </SelectItem>
@@ -188,7 +144,7 @@ export const VideoGeneratorSettings = ({ settings, onSettingsChange }: VideoGene
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {tones.map((tone) => (
+              {TONES.map((tone) => (
                 <SelectItem key={tone.value} value={tone.value}>
                   {tone.label}
                 </SelectItem>
@@ -207,7 +163,7 @@ export const VideoGeneratorSettings = ({ settings, onSettingsChange }: VideoGene
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {languages.map((lang) => (
+              {LANGUAGES.map((lang) => (
                 <SelectItem key={lang.value} value={lang.value}>
                   {lang.label}
                 </SelectItem>
@@ -224,7 +180,7 @@ export const VideoGeneratorSettings = ({ settings, onSettingsChange }: VideoGene
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {voices.map((voice) => (
+              {VOICES.map((voice) => (
                 <SelectItem key={voice.value} value={voice.value}>
                   {voice.label}
                 </SelectItem>
@@ -243,7 +199,7 @@ export const VideoGeneratorSettings = ({ settings, onSettingsChange }: VideoGene
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {povStyles.map((pov) => (
+              {POV_STYLES.map((pov) => (
                 <SelectItem key={pov.value} value={pov.value}>
                   {pov.label}
                 </SelectItem>

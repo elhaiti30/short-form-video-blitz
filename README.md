@@ -1,8 +1,20 @@
-# Welcome to your Lovable project
+# VideoBlitz AI - AI-Powered Video Generator
+
+Transform ideas into viral short-form content with AI.
 
 ## Project info
 
 **URL**: https://lovable.dev/projects/a7205652-ce26-49b4-bf06-1161509b920b
+
+## 🚀 Features
+
+- **AI Video Generation**: Create professional videos from text prompts in seconds
+- **Multi-Platform Support**: Optimized for TikTok, Instagram Reels, and YouTube Shorts
+- **Smart Scheduler**: AI-powered content scheduling and automation
+- **Template Library**: Access professionally designed video templates
+- **Analytics Dashboard**: Track performance and engagement metrics
+- **Team Collaboration**: Work together on video projects
+- **Cloud Storage**: Access your projects from anywhere
 
 ## How can I edit this code?
 
@@ -54,11 +66,53 @@ npm run dev
 
 This project is built with:
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+- **Frontend**: React 18 + TypeScript + Vite
+- **UI Components**: Shadcn/ui + Tailwind CSS
+- **Backend**: Supabase (Database, Auth, Edge Functions, Storage)
+- **Routing**: React Router v6
+- **State Management**: React Hooks + Custom Hooks
+- **Icons**: Lucide React
+- **Animations**: Tailwind CSS Animations
+
+## 📁 Project Structure
+
+```
+src/
+├── components/
+│   ├── ui/                    # Reusable UI components (shadcn)
+│   ├── video-generator/       # Video generator sub-components
+│   ├── Dashboard.tsx          # Main dashboard
+│   ├── VideoGenerator.tsx     # Video creation interface
+│   └── ...
+├── constants/
+│   └── videoOptions.ts        # Shared configuration constants
+├── hooks/
+│   ├── useAuth.tsx           # Authentication hook
+│   ├── useVideoData.tsx      # Video data management
+│   └── useVideoGeneration.tsx # Video generation logic
+├── pages/
+│   ├── Landing.tsx           # Landing page
+│   └── Dashboard.tsx         # Dashboard page
+├── utils/
+│   └── videoHelpers.ts       # Video utility functions
+└── integrations/
+    └── supabase/             # Supabase configuration
+```
+
+## 🎨 Design System
+
+The app uses a comprehensive design system with semantic color tokens. Key principles:
+
+✅ **DO:**
+- Use semantic color tokens from design system (e.g., `bg-primary`, `text-foreground`)
+- Keep components under 300 lines
+- Extract reusable logic into hooks
+- Use TypeScript for type safety
+
+❌ **DON'T:**
+- Use direct colors (e.g., `text-red-600`, `bg-blue-100`)
+- Create monolithic components
+- Duplicate constants across files
 
 ## How can I deploy this project?
 

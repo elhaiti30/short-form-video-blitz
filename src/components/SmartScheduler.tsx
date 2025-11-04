@@ -164,21 +164,27 @@ export const SmartScheduler = () => {
     { title: "Team Interview Series", type: "Behind the Scenes", priority: "Low", aiScore: 82 },
   ];
 
-  const getStatusColor = (status: string) => {
+  const getStatusVariant = (status: string): "default" | "secondary" | "outline" => {
     switch (status) {
-      case "scheduled": return "bg-blue-100 text-blue-800";
-      case "pending": return "bg-yellow-100 text-yellow-800";
-      case "draft": return "bg-gray-100 text-gray-800";
-      default: return "bg-gray-100 text-gray-800";
+      case "scheduled":
+        return "default";
+      case "pending":
+        return "secondary";
+      case "draft":
+      default:
+        return "outline";
     }
   };
 
-  const getPriorityColor = (priority: string) => {
+  const getPriorityVariant = (priority: string): "default" | "secondary" | "destructive" => {
     switch (priority) {
-      case "High": return "text-red-600";
-      case "Medium": return "text-orange-600";
-      case "Low": return "text-green-600";
-      default: return "text-gray-600";
+      case "High":
+        return "destructive";
+      case "Medium":
+        return "default";
+      case "Low":
+      default:
+        return "secondary";
     }
   };
 
@@ -250,7 +256,7 @@ export const SmartScheduler = () => {
                         <h4 className="font-medium">{content.title}</h4>
                         <p className="text-sm text-muted-foreground">{content.platform}</p>
                       </div>
-                      <Badge className={getStatusColor(content.status)}>
+                      <Badge variant={getStatusVariant(content.status)}>
                         {content.status}
                       </Badge>
                     </div>
@@ -363,10 +369,10 @@ export const SmartScheduler = () => {
                       <Badge variant="outline" className="text-xs">{content.type}</Badge>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className={`text-sm font-medium ${getPriorityColor(content.priority)}`}>
+                      <Badge variant={getPriorityVariant(content.priority)} className="text-xs">
                         {content.priority}
-                      </span>
-                      <Badge variant="secondary">AI Score: {content.aiScore}</Badge>
+                      </Badge>
+                      <Badge variant="outline" className="text-xs">AI: {content.aiScore}</Badge>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
