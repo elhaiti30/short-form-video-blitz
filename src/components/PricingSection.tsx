@@ -154,7 +154,7 @@ const PricingSection = () => {
                     <ul className="space-y-2">
                       {plan.features.map((feature, idx) => (
                         <li key={idx} className="flex items-center gap-3">
-                          <Check className="h-4 w-4 text-green-500 flex-shrink-0" />
+                          <Check className="h-4 w-4 flex-shrink-0" style={{ color: 'hsl(var(--success))' }} />
                           <span className="text-sm">{feature}</span>
                         </li>
                       ))}

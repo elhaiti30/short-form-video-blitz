@@ -291,7 +291,7 @@ export const Dashboard = () => {
                 </div>
                 <Video className="h-8 w-8 text-primary" />
               </div>
-              <div className="mt-2 text-sm text-green-600 flex items-center">
+              <div className="mt-2 text-sm flex items-center" style={{ color: 'hsl(var(--success))' }}>
                 <TrendingUp className="h-3 w-3 mr-1" />
                 +12% from last month
               </div>
@@ -307,7 +307,7 @@ export const Dashboard = () => {
                 </div>
                 <Eye className="h-8 w-8 text-primary" />
               </div>
-              <div className="mt-2 text-sm text-green-600 flex items-center">
+              <div className="mt-2 text-sm flex items-center" style={{ color: 'hsl(var(--success))' }}>
                 <TrendingUp className="h-3 w-3 mr-1" />
                 +24% from last month
               </div>
@@ -323,7 +323,7 @@ export const Dashboard = () => {
                 </div>
                 <Heart className="h-8 w-8 text-primary" />
               </div>
-              <div className="mt-2 text-sm text-green-600 flex items-center">
+              <div className="mt-2 text-sm flex items-center" style={{ color: 'hsl(var(--success))' }}>
                 <TrendingUp className="h-3 w-3 mr-1" />
                 +3.2% from last month
               </div>
@@ -361,10 +361,10 @@ export const Dashboard = () => {
             {recentActivity.map((activity) => (
               <div key={activity.id} className="flex items-start gap-3 p-2 hover:bg-muted/50 rounded-lg transition-colors">
                 <div className="mt-1">
-                  {activity.icon === 'check' && <CheckCircle2 className="h-4 w-4 text-green-500" />}
-                  {activity.icon === 'video' && <Video className="h-4 w-4 text-blue-500" />}
-                  {activity.icon === 'share' && <Share2 className="h-4 w-4 text-purple-500" />}
-                  {activity.icon === 'template' && <Sparkles className="h-4 w-4 text-orange-500" />}
+                  {activity.icon === 'check' && <CheckCircle2 className="h-4 w-4" style={{ color: 'hsl(var(--success))' }} />}
+                  {activity.icon === 'video' && <Video className="h-4 w-4" style={{ color: 'hsl(var(--info))' }} />}
+                  {activity.icon === 'share' && <Share2 className="h-4 w-4" style={{ color: 'hsl(var(--primary-glow))' }} />}
+                  {activity.icon === 'template' && <Sparkles className="h-4 w-4" style={{ color: 'hsl(var(--warning))' }} />}
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium truncate">{activity.title}</p>

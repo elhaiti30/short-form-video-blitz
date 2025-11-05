@@ -33,6 +33,18 @@
     --chart-5: 27 87% 67%;
     --radius: 0.75rem;
     
+    /* Status & Semantic Colors */
+    --success: 142 76% 36%;
+    --success-foreground: 142 76% 96%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 38 92% 96%;
+    --info: 217 91% 60%;
+    --info-foreground: 217 91% 96%;
+    --status-processing: 217 91% 60%;
+    --status-completed: 142 76% 36%;
+    --status-pending: 38 92% 50%;
+    --status-scheduled: 280 85% 75%;
+    
     /* Sidebar colors */
     --sidebar-background: 240 6% 8%;
     --sidebar-foreground: 240 5% 90%;
@@ -79,6 +91,18 @@
     --border: 240 5.9% 90%;
     --input: 240 5.9% 90%;
     --ring: 255 70% 62%;
+    
+    /* Status & Semantic Colors */
+    --success: 142 76% 36%;
+    --success-foreground: 142 76% 10%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 38 92% 10%;
+    --info: 217 91% 60%;
+    --info-foreground: 217 91% 10%;
+    --status-processing: 217 91% 60%;
+    --status-completed: 142 76% 36%;
+    --status-pending: 38 92% 50%;
+    --status-scheduled: 280 85% 75%;
     
     /* Sidebar colors for light mode */
     --sidebar-background: 0 0% 98%;
