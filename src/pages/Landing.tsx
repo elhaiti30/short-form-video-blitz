@@ -3,6 +3,7 @@ import { Card } from "@/components/ui/card";
 import { ArrowRight, Sparkles, Video, Zap, BarChart3, Users, Cloud, PlayCircle } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import PricingSection from "@/components/PricingSection";
 
 const Landing = () => {
   const navigate = useNavigate();
@@ -40,12 +41,6 @@ const Landing = () => {
     { number: "1", title: "Enter Your Idea", description: "Type what you want to create — from tutorials to fun clips." },
     { number: "2", title: "AI Creates Video", description: "Our AI generates professional videos in seconds — templates, animations, and voiceovers included." },
     { number: "3", title: "Download & Share", description: "Publish instantly to TikTok, Instagram Reels, or YouTube Shorts." },
-  ];
-
-  const pricingPreview = [
-    { name: "Starter", price: "Free", description: "Perfect for testing & beginners", highlight: false },
-    { name: "Creator", price: "$19/mo", description: "Most popular — advanced features", highlight: true },
-    { name: "Pro", price: "$49/mo", description: "Professional use & agencies", highlight: false },
   ];
 
   return (
@@ -171,32 +166,8 @@ const Landing = () => {
         </div>
       </section>
 
-      {/* Pricing Preview */}
-      <section className="py-20 px-4 bg-background/50">
-        <div className="container mx-auto max-w-6xl">
-          <h2 className="text-4xl font-bold text-center mb-4">Simple, Transparent Pricing</h2>
-          <p className="text-center text-muted-foreground mb-12">Choose the plan that fits your needs</p>
-          
-          <div className="grid md:grid-cols-3 gap-6 mb-8">
-            {pricingPreview.map((plan, index) => (
-              <Card key={index} className={`p-6 text-center hover:scale-105 transition-transform ${plan.highlight ? 'border-primary border-2 shadow-lg' : ''}`}>
-                {plan.highlight && (
-                  <div className="text-xs font-bold text-primary mb-2">MOST POPULAR</div>
-                )}
-                <h3 className="text-2xl font-bold mb-2">{plan.name}</h3>
-                <div className="text-4xl font-bold text-primary mb-4">{plan.price}</div>
-                <p className="text-muted-foreground text-sm">{plan.description}</p>
-              </Card>
-            ))}
-          </div>
-          
-          <div className="text-center">
-            <Button size="lg" onClick={handleGetStarted} className="px-8">
-              Get Started Free — No Credit Card Needed
-            </Button>
-          </div>
-        </div>
-      </section>
+      {/* Pricing Section */}
+      <PricingSection />
 
       {/* Footer */}
       <footer className="py-12 px-4 border-t">

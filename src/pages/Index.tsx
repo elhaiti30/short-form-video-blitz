@@ -15,7 +15,6 @@ import { SocialMediaManager } from "@/components/SocialMediaManager";
 import { EnhancedVideoLibrary } from "@/components/EnhancedVideoLibrary";
 import { UserSettings } from "@/components/UserSettings";
 import PlatformFeatures from "@/components/PlatformFeatures";
-import PricingSection from "@/components/PricingSection";
 import Footer from "@/components/Footer";
 import { AppSidebar } from "@/components/AppSidebar";
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
@@ -77,15 +76,9 @@ const Index = () => {
               </div>
 
               {activeSection === "generator" && (
-                <>
-                  <div className="py-16">
-                    <PlatformFeatures />
-                  </div>
-
-                  <div className="py-16 bg-card/20">
-                    <PricingSection />
-                  </div>
-                </>
+                <div className="py-16">
+                  <PlatformFeatures />
+                </div>
               )}
             </main>
             
