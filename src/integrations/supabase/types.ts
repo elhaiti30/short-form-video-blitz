@@ -636,7 +636,7 @@ export type Database = {
           comments_count: number | null
           created_at: string | null
           description: string | null
-          duration: unknown | null
+          duration: unknown
           id: number
           is_public: boolean | null
           likes_count: number | null
@@ -658,7 +658,7 @@ export type Database = {
           comments_count?: number | null
           created_at?: string | null
           description?: string | null
-          duration?: unknown | null
+          duration?: unknown
           id?: number
           is_public?: boolean | null
           likes_count?: number | null
@@ -680,7 +680,7 @@ export type Database = {
           comments_count?: number | null
           created_at?: string | null
           description?: string | null
-          duration?: unknown | null
+          duration?: unknown
           id?: number
           is_public?: boolean | null
           likes_count?: number | null
