@@ -14,15 +14,24 @@ interface Profile {
   updated_at: string | null;
 }
 
+interface SubscriptionStatus {
+  subscribed: boolean;
+  plan: 'free' | 'creator' | 'pro';
+  product_id: string | null;
+  subscription_end: string | null;
+}
+
 interface AuthContextType {
   user: User | null;
   session: Session | null;
   profile: Profile | null;
+  subscription: SubscriptionStatus | null;
   loading: boolean;
   signIn: (email: string, password: string) => Promise<{ error: any }>;
   signUp: (email: string, password: string, username?: string) => Promise<{ error: any }>;
   signOut: () => Promise<void>;
   updateProfile: (updates: Partial<Profile>) => Promise<{ error: any }>;
+  checkSubscription: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -31,6 +40,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
+  const [subscription, setSubscription] = useState<SubscriptionStatus | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -44,9 +54,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           // Fetch user profile with setTimeout to prevent auth deadlock
           setTimeout(() => {
             fetchProfile(session.user.id);
+            checkSubscription();
           }, 0);
         } else {
           setProfile(null);
+          setSubscription(null);
         }
         
         setLoading(false);
@@ -61,6 +73,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       if (session?.user) {
         setTimeout(() => {
           fetchProfile(session.user.id);
+          checkSubscription();
         }, 0);
       }
       
@@ -190,16 +203,35 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     return { error };
   };
 
+  const checkSubscription = async () => {
+    try {
+      const { data, error } = await supabase.functions.invoke('check-subscription');
+      
+      if (error) {
+        console.error('Error checking subscription:', error);
+        setSubscription({ subscribed: false, plan: 'free', product_id: null, subscription_end: null });
+        return;
+      }
+      
+      setSubscription(data);
+    } catch (error) {
+      console.error('Error checking subscription:', error);
+      setSubscription({ subscribed: false, plan: 'free', product_id: null, subscription_end: null });
+    }
+  };
+
   return (
     <AuthContext.Provider value={{
       user,
       session,
       profile,
+      subscription,
       loading,
       signIn,
       signUp,
       signOut,
-      updateProfile
+      updateProfile,
+      checkSubscription
     }}>
       {children}
     </AuthContext.Provider>
