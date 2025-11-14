@@ -1,16 +1,19 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Check, Star, Zap, Crown } from "lucide-react";
+import { Check, Star, Zap, Crown, Loader2 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { useState } from "react";
 
 const PricingSection = () => {
-  const { user } = useAuth();
+  const { user, subscription } = useAuth();
   const navigate = useNavigate();
+  const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
 
-  const handlePlanSelect = (planName: string) => {
+  const handlePlanSelect = async (planName: string, priceId: string | null) => {
     if (!user) {
       toast({
         title: "Sign in required",
@@ -21,70 +24,121 @@ const PricingSection = () => {
       return;
     }
 
-    toast({
-      title: "Plan Selected",
-      description: `You've selected the ${planName} plan! Redirecting to checkout...`,
-    });
-    
-    // In a real app, this would redirect to payment processing
-    setTimeout(() => {
+    if (planName === "Starter") {
       toast({
-        title: "Coming Soon",
-        description: "Payment processing will be available soon!",
+        title: "Free Plan",
+        description: "You're already on the free plan!",
       });
-    }, 1500);
+      return;
+    }
+
+    if (!priceId) return;
+
+    setLoadingPlan(planName);
+
+    try {
+      const { data, error } = await supabase.functions.invoke('create-checkout', {
+        body: { priceId }
+      });
+
+      if (error) throw error;
+
+      if (data?.url) {
+        window.open(data.url, '_blank');
+        toast({
+          title: "Redirecting to Checkout",
+          description: "Opening Stripe checkout in a new tab...",
+        });
+      }
+    } catch (error) {
+      console.error('Error creating checkout:', error);
+      toast({
+        title: "Error",
+        description: "Failed to start checkout. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setLoadingPlan(null);
+    }
+  };
+
+  const handleManageSubscription = async () => {
+    try {
+      const { data, error } = await supabase.functions.invoke('customer-portal');
+
+      if (error) throw error;
+
+      if (data?.url) {
+        window.open(data.url, '_blank');
+      }
+    } catch (error) {
+      console.error('Error opening customer portal:', error);
+      toast({
+        title: "Error",
+        description: "Failed to open subscription management. Please try again.",
+        variant: "destructive"
+      });
+    }
   };
 
   const plans = [
     {
       name: "Starter",
       price: "Free",
-      description: "Perfect for beginners and casual creators",
+      period: "",
+      description: "Perfect for testing & hobby creators",
       features: [
         "5 videos per month",
-        "Basic templates",
-        "720p quality",
-        "Community support",
-        "Basic analytics"
+        "720p quality max",
+        "Watermarked videos",
+        "Basic templates only",
+        "Single platform export"
       ],
       buttonText: "Get Started",
       popular: false,
-      icon: Star
+      icon: Star,
+      priceId: null
     },
     {
       name: "Creator",
-      price: "$19",
-      description: "For serious content creators and small businesses",
+      price: "$39",
+      period: "/month",
+      description: "Perfect for content creators & influencers",
       features: [
         "50 videos per month",
-        "Premium templates",
-        "1080p quality",
-        "Priority support",
-        "Advanced analytics",
-        "Custom branding",
-        "Team collaboration"
+        "Up to 1080p Full HD",
+        "No watermark",
+        "All templates & styles",
+        "Multi-platform export",
+        "AI script generation",
+        "Basic analytics"
       ],
       buttonText: "Start Creating",
       popular: true,
-      icon: Zap
+      icon: Zap,
+      priceId: "price_1STVSBGzdJfkQwRgfrI8JJ6j"
     },
     {
       name: "Pro",
-      price: "$49",
-      description: "For agencies and large-scale content production",
+      price: "$99",
+      period: "/month",
+      description: "Perfect for agencies & businesses",
       features: [
         "Unlimited videos",
-        "All templates",
         "4K quality",
-        "24/7 support",
-        "Enterprise analytics",
-        "White-label solution",
+        "Priority AI processing",
+        "Custom branding (brand kits)",
+        "Team collaboration (3-5 seats)",
+        "Advanced analytics",
+        "Social media scheduler",
         "API access",
-        "Custom integrations"
+        "White-label option",
+        "24/7 priority support"
       ],
       buttonText: "Go Pro",
       popular: false,
-      icon: Crown
+      icon: Crown,
+      priceId: "price_1STVSVGzdJfkQwRgdxVgsWQ0"
     }
   ];
 
@@ -99,6 +153,21 @@ const PricingSection = () => {
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
             Start free and scale as you grow. All plans include our core AI video generation features.
           </p>
+          
+          {subscription?.subscribed && (
+            <div className="flex flex-col items-center gap-3 pt-4">
+              <Badge variant="outline" className="text-sm">
+                Current Plan: {subscription.plan.charAt(0).toUpperCase() + subscription.plan.slice(1)}
+              </Badge>
+              <Button 
+                onClick={handleManageSubscription}
+                variant="outline"
+                size="sm"
+              >
+                Manage Subscription
+              </Button>
+            </div>
+          )}
         </div>
 
         {/* Pricing Cards */}
@@ -139,12 +208,28 @@ const PricingSection = () => {
                 </CardHeader>
 
                 <CardContent className="space-y-6">
+                  {subscription?.plan === plan.name.toLowerCase() && (
+                    <Badge className="w-full justify-center bg-primary text-white">
+                      Your Current Plan
+                    </Badge>
+                  )}
+                  
                   <Button 
-                    onClick={() => handlePlanSelect(plan.name)}
+                    onClick={() => handlePlanSelect(plan.name, plan.priceId)}
                     className={`w-full ${plan.popular ? 'premium-button text-white' : ''}`}
                     variant={plan.popular ? undefined : "outline"}
+                    disabled={loadingPlan === plan.name || subscription?.plan === plan.name.toLowerCase()}
                   >
-                    {plan.buttonText}
+                    {loadingPlan === plan.name ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Loading...
+                      </>
+                    ) : subscription?.plan === plan.name.toLowerCase() ? (
+                      "Current Plan"
+                    ) : (
+                      plan.buttonText
+                    )}
                   </Button>
                   
                   <div className="space-y-3">
