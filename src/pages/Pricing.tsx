@@ -1,14 +1,15 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Check } from "lucide-react";
+import { Check, Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 const Pricing = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, subscription } = useAuth();
   const [loading, setLoading] = useState(false);
 
   const plans = [
@@ -23,11 +24,12 @@ const Pricing = () => {
         "Community support",
       ],
       tier: "free",
+      priceId: null,
       popular: false,
     },
     {
       name: "Creator",
-      price: "$19",
+      price: "$39",
       period: "/month",
       description: "For serious content creators",
       features: [
@@ -39,11 +41,12 @@ const Pricing = () => {
         "Priority support",
       ],
       tier: "creator",
+      priceId: "price_1STVSBGzdJfkQwRgfrI8JJ6j",
       popular: true,
     },
     {
       name: "Pro",
-      price: "$49",
+      price: "$99",
       period: "/month",
       description: "For professionals and agencies",
       features: [
@@ -55,11 +58,12 @@ const Pricing = () => {
         "Dedicated support",
       ],
       tier: "pro",
+      priceId: "price_1STVSVGzdJfkQwRgdxVgsWQ0",
       popular: false,
     },
   ];
 
-  const handleSelectPlan = async (tier: string) => {
+  const handleSelectPlan = async (priceId: string | null, tier: string) => {
     if (!user) {
       navigate("/auth");
       return;
@@ -67,17 +71,37 @@ const Pricing = () => {
 
     setLoading(true);
     
-    if (tier === "free") {
+    if (tier === "free" || !priceId) {
       toast.success("Starter plan activated!");
       navigate("/dashboard");
       setLoading(false);
       return;
     }
 
-    // For paid plans, integrate with Stripe here
-    toast.info("Stripe integration coming soon!");
-    navigate("/dashboard");
-    setLoading(false);
+    try {
+      const { data, error } = await supabase.functions.invoke("create-checkout", {
+        body: { priceId },
+      });
+
+      if (error) throw error;
+
+      if (data?.url) {
+        window.open(data.url, "_blank");
+        toast.success("Opening checkout...");
+      }
+    } catch (error: any) {
+      console.error("Checkout error:", error);
+      toast.error(error.message || "Failed to start checkout");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const isCurrentPlan = (tier: string) => {
+    if (tier === "free") return !subscription?.subscribed;
+    if (tier === "creator") return subscription?.product_id === "prod_RlWVXaVwmE32wG";
+    if (tier === "pro") return subscription?.product_id === "prod_RlWW8QOVNlW6i1";
+    return false;
   };
 
   return (
@@ -98,7 +122,12 @@ const Pricing = () => {
                 plan.popular ? "border-primary border-2 shadow-2xl scale-105" : ""
               }`}
             >
-              {plan.popular && (
+              {isCurrentPlan(plan.tier) && (
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-green-500 text-white px-4 py-1 rounded-full text-sm font-bold">
+                  YOUR CURRENT PLAN
+                </div>
+              )}
+              {plan.popular && !isCurrentPlan(plan.tier) && (
                 <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-4 py-1 rounded-full text-sm font-bold">
                   MOST POPULAR
                 </div>
@@ -115,12 +144,23 @@ const Pricing = () => {
                 <p className="text-muted-foreground">{plan.description}</p>
 
                 <Button
-                  onClick={() => handleSelectPlan(plan.tier)}
-                  disabled={loading}
+                  onClick={() => handleSelectPlan(plan.priceId, plan.tier)}
+                  disabled={loading || isCurrentPlan(plan.tier)}
                   className="w-full"
                   variant={plan.popular ? "default" : "outline"}
                 >
-                  {plan.tier === "free" ? "Start Free" : "Upgrade"}
+                  {loading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Processing...
+                    </>
+                  ) : isCurrentPlan(plan.tier) ? (
+                    "Current Plan"
+                  ) : plan.tier === "free" ? (
+                    "Start Free"
+                  ) : (
+                    "Upgrade"
+                  )}
                 </Button>
 
                 <div className="space-y-3 pt-6">
