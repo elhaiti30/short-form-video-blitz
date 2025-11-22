@@ -26,8 +26,8 @@ const Hero = () => {
 
   return (
     <section className="relative min-h-[85vh] sm:min-h-[75vh] md:min-h-[70vh] flex items-center justify-center overflow-hidden pt-16">
-      {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-card" />
+      {/* Animated Background */}
+      <div className="absolute inset-0 animated-gradient-slow" />
       
       {/* Hero image with overlay */}
       <div className="absolute inset-0 opacity-20">

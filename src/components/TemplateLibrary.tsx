@@ -130,8 +130,9 @@ interface TemplateLibraryProps {
 }
 
 export const TemplateLibrary = ({ onSelectTemplate }: TemplateLibraryProps) => {
-  const { user } = useAuth();
+  const { user, subscription } = useAuth();
   const { templates: dbTemplates, loading } = useVideoData();
+  const isSubscribed = subscription?.subscribed;
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [sortBy, setSortBy] = useState("popular");
@@ -141,6 +142,16 @@ export const TemplateLibrary = ({ onSelectTemplate }: TemplateLibraryProps) => {
       toast({
         title: "Sign in required",
         description: "Please sign in to use templates",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    const isPremiumTemplate = 'isPremium' in template ? template.isPremium : template.is_premium;
+    if (isPremiumTemplate && !isSubscribed) {
+      toast({
+        title: "Premium required",
+        description: "Upgrade to premium to access this template",
         variant: "destructive"
       });
       return;
@@ -315,9 +326,9 @@ export const TemplateLibrary = ({ onSelectTemplate }: TemplateLibraryProps) => {
               <Button 
                 onClick={() => handleUseTemplate(template)}
                 className="w-full premium-button"
-                disabled={!user}
+                disabled={!user || (('isPremium' in template ? template.isPremium : template.is_premium) && !isSubscribed)}
               >
-                {user ? 'Use Template' : 'Sign in to Use'}
+                {!user ? 'Sign in to Use' : (('isPremium' in template ? template.isPremium : template.is_premium) && !isSubscribed) ? 'Premium Required' : 'Use Template'}
               </Button>
             </CardContent>
           </Card>
