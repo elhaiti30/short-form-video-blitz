@@ -27,9 +27,10 @@ interface VideoSettings {
 }
 
 const VideoGenerator = () => {
-  const { user } = useAuth();
+  const { user, subscription } = useAuth();
   const { createProject, updateProject } = useVideoData();
   const navigate = useNavigate();
+  const isSubscribed = subscription?.subscribed;
   
   const [prompt, setPrompt] = useState("");
   const [projectName, setProjectName] = useState("");
@@ -106,6 +107,26 @@ const VideoGenerator = () => {
         description: "Please enter a video description",
         variant: "destructive"
       });
+      return;
+    }
+
+    if (!user) {
+      toast({
+        title: "Sign in required",
+        description: "Please sign in to generate videos",
+        variant: "destructive"
+      });
+      navigate('/auth');
+      return;
+    }
+
+    if (!isSubscribed) {
+      toast({
+        title: "Premium required",
+        description: "Upgrade to premium to generate unlimited videos",
+        variant: "destructive"
+      });
+      navigate('/pricing');
       return;
     }
 

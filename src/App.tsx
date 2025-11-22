@@ -13,6 +13,8 @@ import Landing from "./pages/Landing";
 import Onboarding from "./pages/Onboarding";
 import Pricing from "./pages/Pricing";
 import Billing from "./pages/Billing";
+import Success from "./pages/Success";
+import Cancel from "./pages/Cancel";
 
 const queryClient = new QueryClient();
 
@@ -32,6 +34,8 @@ const App = () => (
             <Route path="/onboarding" element={<Onboarding />} />
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/billing" element={<Billing />} />
+            <Route path="/success" element={<Success />} />
+            <Route path="/cancel" element={<Cancel />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
